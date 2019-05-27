@@ -1,4 +1,4 @@
-package pe.gob.reniec.eaddress.sdk;
+package pe.gob.reniec.pki.eaddress.sdk;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.Client;
@@ -27,7 +27,9 @@ import pe.gob.reniec.eaddress.sdk.utils.MySSLConnectionSocketFactory;
 import javax.ws.rs.core.MediaType;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -146,6 +148,8 @@ public class ReniecEAddressClient {
             throw new Exception("Not File CSV: ");
         }
 
+        Date date = new Date();
+
         DataPerson oPerson = new DataPerson();
         oPerson.setDocType(this.config.getDocType());
         oPerson.setDoc(this.config.getDoc());
@@ -162,7 +166,13 @@ public class ReniecEAddressClient {
         metadata.setSubject(message.getSubject());
         metadata.setTag(message.getTag());
         metadata.setQuantity(count);
-        metadata.setDate(new Date());
+        metadata.setDate(date);
+
+        String hashMessage = oPerson.getName().concat(oApp.getName()).concat(message.getSubject()).concat(String.valueOf(date.getTime())).concat(message.getMessage());
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = digest.digest(hashMessage.getBytes(StandardCharsets.UTF_8));
+        String sha256hex = Utils.bytesToHex(hash);
+        metadata.setMessageHash(sha256hex);
 
         return metadata;
     }
