@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
-/**
- * @author Alexander Llacho
- */
 public class Metadata {
 
     @JsonProperty("tipo_acuse")
@@ -23,6 +20,8 @@ public class Metadata {
     private Integer quantity;
     @JsonProperty("fecha_hora")
     private Date date;
+    @JsonProperty("mensaje_hash")
+    private String messageHash;
 
     public Metadata() {
     }
@@ -83,6 +82,14 @@ public class Metadata {
         this.date = date;
     }
 
+    public String getMessageHash() {
+        return messageHash;
+    }
+
+    public void setMessageHash(String messageHash) {
+        this.messageHash = messageHash;
+    }
+
     @Override
     public String toString() {
         return "Metadata{" +
@@ -93,6 +100,7 @@ public class Metadata {
                 ", tag='" + tag + '\'' +
                 ", quantity=" + quantity +
                 ", date=" + date +
+                ", messageHash='" + messageHash + '\'' +
                 '}';
     }
 }
