@@ -1,4 +1,4 @@
-package pe.gob.reniec.pki.eaddress.sdk;
+package pe.gob.reniec.eaddress.sdk;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.Client;
@@ -29,7 +29,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 

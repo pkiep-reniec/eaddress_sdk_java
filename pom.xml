@@ -39,6 +39,12 @@
 
     <developers>
         <developer>
+            <name>Alexander Llacho</name>
+            <email>allacho@pkiep.reniec.gob.pe</email>
+            <organization>RENIEC</organization>
+            <organizationUrl>https://pki.reniec.gob.pe</organizationUrl>
+        </developer>
+        <developer>
             <name>Miguel Pazo</name>
             <email>miguel.ps19@gmail.com</email>
             <organization>RENIEC</organization>
