@@ -304,6 +304,4 @@ public class ReniecEAddressClient {
     public ConfigAga getConfigAga() {
         return configAga;
     }
-
-
 }
