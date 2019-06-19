@@ -2,8 +2,6 @@ package pe.gob.reniec.eaddress.sdk.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Arrays;
-
 /**
  * @author Alexander Llacho
  */
@@ -15,10 +13,8 @@ public class Config {
     private String clientSecret;
     @JsonProperty("security_uri")
     private String securityUri;
-    @JsonProperty("eaddress_single_uri")
-    private String eaddressSingleUri;
-    @JsonProperty("eaddress_massive_uri")
-    private String eaddressMassiveUri;
+    @JsonProperty("eaddress_service_uri")
+    private String eaddressServiceUri;
     @JsonProperty("doc_type")
     private String docType;
     @JsonProperty("doc")
@@ -27,6 +23,9 @@ public class Config {
     private String name;
     @JsonProperty("app_name")
     private String appName;
+
+    public Config() {
+    }
 
     public String getClientId() {
         return clientId;
@@ -52,20 +51,12 @@ public class Config {
         this.securityUri = securityUri;
     }
 
-    public String getEaddressSingleUri() {
-        return eaddressSingleUri;
+    public String getEaddressServiceUri() {
+        return eaddressServiceUri;
     }
 
-    public void setEaddressSingleUri(String eaddressSingleUri) {
-        this.eaddressSingleUri = eaddressSingleUri;
-    }
-
-    public String getEaddressMassiveUri() {
-        return eaddressMassiveUri;
-    }
-
-    public void setEaddressMassiveUri(String eaddressMassiveUri) {
-        this.eaddressMassiveUri = eaddressMassiveUri;
+    public void setEaddressServiceUri(String eaddressServiceUri) {
+        this.eaddressServiceUri = eaddressServiceUri;
     }
 
     public String getDocType() {
@@ -106,8 +97,7 @@ public class Config {
                 "clientId='" + clientId + '\'' +
                 ", clientSecret='" + clientSecret + '\'' +
                 ", securityUri='" + securityUri + '\'' +
-                ", eaddressSingleUri='" + eaddressSingleUri + '\'' +
-                ", eaddressMassiveUri='" + eaddressMassiveUri + '\'' +
+                ", eaddressServiceUri='" + eaddressServiceUri + '\'' +
                 ", docType='" + docType + '\'' +
                 ", doc='" + doc + '\'' +
                 ", name='" + name + '\'' +

@@ -2,36 +2,24 @@ package pe.gob.reniec.eaddress.sdk.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Date;
-
 public class Metadata {
 
-    @JsonProperty("tipo_acuse")
-    private String accuseType;
     @JsonProperty("emisor")
     private DataPerson issuer;
-    @JsonProperty("aplicacion")
-    private DataApp application;
+    @JsonProperty("delegado")
+    private DataPerson delegate;
     @JsonProperty("asunto")
     private String subject;
     @JsonProperty("tag")
     private String tag;
     @JsonProperty("cantidad")
     private Integer quantity;
-    @JsonProperty("fecha_hora")
-    private Date date;
-    @JsonProperty("mensaje_hash")
-    private String messageHash;
+    @JsonProperty("aplicacion")
+    private DataApp application;
+    @JsonProperty("content_hash")
+    private String contentHash;
 
     public Metadata() {
-    }
-
-    public String getAccuseType() {
-        return accuseType;
-    }
-
-    public void setAccuseType(String accuseType) {
-        this.accuseType = accuseType;
     }
 
     public DataPerson getIssuer() {
@@ -42,12 +30,12 @@ public class Metadata {
         this.issuer = issuer;
     }
 
-    public DataApp getApplication() {
-        return application;
+    public DataPerson getDelegate() {
+        return delegate;
     }
 
-    public void setApplication(DataApp application) {
-        this.application = application;
+    public void setDelegate(DataPerson delegate) {
+        this.delegate = delegate;
     }
 
     public String getSubject() {
@@ -74,33 +62,32 @@ public class Metadata {
         this.quantity = quantity;
     }
 
-    public Date getDate() {
-        return date;
+    public DataApp getApplication() {
+        return application;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setApplication(DataApp application) {
+        this.application = application;
     }
 
-    public String getMessageHash() {
-        return messageHash;
+    public String getContentHash() {
+        return contentHash;
     }
 
-    public void setMessageHash(String messageHash) {
-        this.messageHash = messageHash;
+    public void setContentHash(String contentHash) {
+        this.contentHash = contentHash;
     }
 
     @Override
     public String toString() {
         return "Metadata{" +
-                "accuseType='" + accuseType + '\'' +
-                ", issuer=" + issuer +
-                ", application=" + application +
+                "issuer=" + issuer +
+                ", delegate=" + delegate +
                 ", subject='" + subject + '\'' +
                 ", tag='" + tag + '\'' +
                 ", quantity=" + quantity +
-                ", date=" + date +
-                ", messageHash='" + messageHash + '\'' +
+                ", application=" + application +
+                ", contentHash='" + contentHash + '\'' +
                 '}';
     }
 }

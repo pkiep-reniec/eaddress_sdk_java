@@ -2,8 +2,6 @@ package pe.gob.reniec.eaddress.sdk.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.File;
-
 /**
  * @author Alexander Llacho
  */
@@ -11,7 +9,7 @@ public class Message {
 
     @JsonProperty("doc")
     private String doc;
-    @JsonProperty("oc_type")
+    @JsonProperty("doc_type")
     private String docType;
     @JsonProperty("subject")
     private String subject;

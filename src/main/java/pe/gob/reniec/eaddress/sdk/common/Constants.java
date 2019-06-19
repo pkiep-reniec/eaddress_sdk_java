@@ -10,5 +10,6 @@ public class Constants {
     public static final String METADATA = "metadata";
     public static final String FILE_ZIP = "toSign.7z";
     public static final String FILE_SIGN = "fileSign.p7s";
-
+    public static final String TYPE_DOC_RUC = "ruc";
+    public static final String TYPE_DOC_DNI = "dni";
 }

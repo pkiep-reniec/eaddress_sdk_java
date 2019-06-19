@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class DataPerson {
 
-    @JsonProperty("tipo_doc")
+    @JsonProperty("tipo_documento")
     private String docType;
-    @JsonProperty("doc")
+    @JsonProperty("documento")
     private String doc;
     @JsonProperty("nombre")
     private String name;

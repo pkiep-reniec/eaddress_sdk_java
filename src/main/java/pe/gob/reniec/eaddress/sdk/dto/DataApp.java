@@ -9,7 +9,7 @@ public class DataApp {
 
     @JsonProperty("nombre")
     private String name;
-    @JsonProperty("client_id")
+    @JsonProperty("identificador")
     private String clientId;
 
     public DataApp() {
