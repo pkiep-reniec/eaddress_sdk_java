@@ -75,8 +75,6 @@ public class ReniecEAddressClient {
     }
 
     public ApiResponse sendMassiveNotification(Message oMessage, File file) {
-        ApiResponse result = null;
-
         try {
             this.pathDir = Utils.CreateTempDir();
 
@@ -93,15 +91,15 @@ public class ReniecEAddressClient {
                     String jsonString = mapper.writeValueAsString(metadata);
                     oMessage.setMetadata(jsonString);
 
-                    result = sendMassive(fileSign, file, oMessage, token.getAccessToken());
+                    ApiResponse result = sendMassive(fileSign, file, oMessage, token.getAccessToken());
 
-                    if (result.getSuccess()) {
+                    if (result != null) {
                         Utils.deleteDirectory(new File(pathDir));
+
+                        return result;
                     }
                 }
             }
-
-            return result;
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
             ex.printStackTrace(new PrintWriter(sw));
@@ -109,7 +107,7 @@ public class ReniecEAddressClient {
             System.out.println(sw.toString());
         }
 
-        return result;
+        return null;
     }
 
     private Metadata createMetadata(Message message, File fileCSV, Boolean single) throws Exception {
@@ -242,7 +240,7 @@ public class ReniecEAddressClient {
                     .addTextBody("callback", oMessage.getCallback() == null ? "" : oMessage.getCallback())
                     .addTextBody("attachments", oMessage.getAttachments() == null ? "" : oMessage.getAttachments())
                     .addTextBody("metadata", oMessage.getMetadata())
-                    .addBinaryBody("fileSign", file, ContentType.create("application/octet-stream"), "filename")
+                    .addBinaryBody("fileSign", file, ContentType.create("application/octet-stream"), file.getName())
                     .build();
 
             HttpPost post = new HttpPost(this.config.getEaddressServiceUri().concat("/api/v1.0/send/single"));
@@ -266,35 +264,29 @@ public class ReniecEAddressClient {
     }
 
     private ApiResponse sendMassive(File file, File fileCSV, Message oMessage, String accessToken) {
-        ApiResponse apiResponse = null;
-
         try {
-//            ClientConfig config = new DefaultClientConfig();
-//            Client client = Client.create(config);
-//            WebResource resource = client.resource(this.config.getEaddressServiceUri().concat("/api/v1.0/send/masive"));
-//
-//            FileDataBodyPart fileDataSign = new FileDataBodyPart("fileSign", file, MediaType.APPLICATION_OCTET_STREAM_TYPE);
-//            FileDataBodyPart fileDataCSV = new FileDataBodyPart("fileCSV", fileCSV, MediaType.APPLICATION_OCTET_STREAM_TYPE);
-//
-//            MultiPart multiPart = new FormDataMultiPart()
-//                    .field("subject", oMessage.getSubject(), MediaType.TEXT_PLAIN_TYPE)
-//                    .field("message", oMessage.getMessage(), MediaType.TEXT_PLAIN_TYPE)
-//                    .field("tag", oMessage.getTag(), MediaType.TEXT_PLAIN_TYPE)
-//                    .field("callback", oMessage.getCallback(), MediaType.TEXT_PLAIN_TYPE)
-//                    .field("metadata", oMessage.getMetadata(), MediaType.TEXT_PLAIN_TYPE)
-//                    .bodyPart(fileDataSign)
-//                    .bodyPart(fileDataCSV);
-//
-//            ClientResponse response = resource.type(MediaType.MULTIPART_FORM_DATA_TYPE)
-//                    .header(HttpHeaders.AUTHORIZATION, "Bearer ".concat(accessToken))
-//                    .post(ClientResponse.class, multiPart);
-//
-//            String strResponse = response.getEntity(String.class);
-//            ObjectMapper mapper = new ObjectMapper();
-//            apiResponse = mapper.readValue(strResponse, ApiResponse.class);
-//            client.destroy();
+            CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
+            HttpEntity entity = MultipartEntityBuilder
+                    .create()
+                    .addTextBody("subject", oMessage.getSubject())
+                    .addTextBody("message", oMessage.getMessage())
+                    .addTextBody("tag", oMessage.getTag() == null ? "" : oMessage.getTag())
+                    .addTextBody("callback", oMessage.getCallback() == null ? "" : oMessage.getCallback())
+                    .addTextBody("metadata", oMessage.getMetadata())
+                    .addBinaryBody("fileCSV", fileCSV, ContentType.create("application/octet-stream"), fileCSV.getName())
+                    .addBinaryBody("fileSign", file, ContentType.create("application/octet-stream"), file.getName())
+                    .build();
 
-            return apiResponse;
+            HttpPost post = new HttpPost(this.config.getEaddressServiceUri().concat("/api/v1.0/send/massive"));
+            post.setHeader("Authorization", "Bearer ".concat(accessToken));
+            post.setEntity(entity);
+
+            HttpResponse response = client.execute(post);
+            Object object = ConvertResponse.getInstance().convert(response, ApiResponse.class);
+
+            if (object != null) {
+                return (ApiResponse) object;
+            }
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
             ex.printStackTrace(new PrintWriter(sw));
@@ -302,7 +294,7 @@ public class ReniecEAddressClient {
             System.out.println(sw.toString());
         }
 
-        return apiResponse;
+        return null;
     }
 
     public Config getConfig() {
