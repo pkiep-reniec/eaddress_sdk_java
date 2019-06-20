@@ -11,7 +11,6 @@ import pe.gob.reniec.eaddress.sdk.dto.ConfigAga;
 import pe.gob.reniec.eaddress.sdk.dto.Message;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -27,10 +26,10 @@ public class SendTest {
     @Before
     public void before() {
         ConfigAga oConfigAga = new ConfigAga();
-        oConfigAga.setAgaUri("http://127.0.0.1:8080/refirma-aga/rest/service/sign-file");
-        oConfigAga.setTimestamp("false");
-        oConfigAga.setCertificateId("certdm");
-        oConfigAga.setSecretPassword("NH7PERU$$$");
+        oConfigAga.setAgaUri("");
+        oConfigAga.setTimestamp("");
+        oConfigAga.setCertificateId("");
+        oConfigAga.setSecretPassword("");
 
         String configFile = getClass().getClassLoader().getResource("reniec_eaddress.json").getFile();
         reniecEAddressClient = new ReniecEAddressClient(configFile, oConfigAga);

@@ -55,14 +55,14 @@ public class SendService {
             File fileSignMetadata = signMetadata(metadata, pathDir);
 
             if (fileSignMetadata != null) {
-                TokenResponse token = this.securityService.getToken();
+                String token = this.securityService.getToken();
 
                 if (token != null) {
                     ObjectMapper mapper = new ObjectMapper();
                     String jsonString = mapper.writeValueAsString(metadata);
                     oMessage.setMetadata(jsonString);
 
-                    ApiResponse result = sendSingle(fileSignMetadata, oMessage, token.getAccessToken());
+                    ApiResponse result = sendSingle(fileSignMetadata, oMessage, token);
 
                     if (result != null) {
                         utils.deleteDirectory(new File(pathDir));
@@ -93,14 +93,14 @@ public class SendService {
             File fileSign = signMetadata(metadata, pathDir);
 
             if (fileSign != null) {
-                TokenResponse token = this.securityService.getToken();
+                String token = this.securityService.getToken();
 
                 if (token != null) {
                     ObjectMapper mapper = new ObjectMapper();
                     String jsonString = mapper.writeValueAsString(metadata);
                     oMessage.setMetadata(jsonString);
 
-                    ApiResponse result = sendMassive(fileSign, file, oMessage, token.getAccessToken());
+                    ApiResponse result = sendMassive(fileSign, file, oMessage, token);
 
                     if (result != null) {
                         utils.deleteDirectory(new File(pathDir));

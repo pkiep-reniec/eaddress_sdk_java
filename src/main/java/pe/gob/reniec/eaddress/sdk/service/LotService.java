@@ -41,7 +41,7 @@ public class LotService {
 
     public PaginatorLot fetchAll(SearchRequest searchRequest) {
         try {
-            TokenResponse token = this.securityService.getToken();
+            String token = this.securityService.getToken();
 
             if (token != null) {
                 CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
@@ -52,7 +52,7 @@ public class LotService {
                 }
 
                 HttpGet request = new HttpGet(uriBuilder.build());
-                request.setHeader("Authorization", "Bearer ".concat(token.getAccessToken()));
+                request.setHeader("Authorization", "Bearer ".concat(token));
 
                 HttpResponse response = client.execute(request);
 
@@ -75,7 +75,7 @@ public class LotService {
 
     public PaginatorLotNotifications fetchNotifications(String lotId, SearchRequest searchRequest) {
         try {
-            TokenResponse token = this.securityService.getToken();
+            String token = this.securityService.getToken();
 
             if (token != null) {
                 CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
@@ -86,7 +86,7 @@ public class LotService {
                 }
 
                 HttpGet request = new HttpGet(uriBuilder.build());
-                request.setHeader("Authorization", "Bearer ".concat(token.getAccessToken()));
+                request.setHeader("Authorization", "Bearer ".concat(token));
 
                 HttpResponse response = client.execute(request);
 
@@ -109,12 +109,12 @@ public class LotService {
 
     public byte[] downloadMetadata(String lotId) {
         try {
-            TokenResponse token = this.securityService.getToken();
+            String token = this.securityService.getToken();
 
             if (token != null) {
                 CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
                 HttpGet request = new HttpGet(this.config.getEaddressServiceUri().concat("/api/v1.0/lot/").concat(lotId).concat("/metadata"));
-                request.setHeader("Authorization", "Bearer ".concat(token.getAccessToken()));
+                request.setHeader("Authorization", "Bearer ".concat(token));
 
                 HttpResponse response = client.execute(request);
 

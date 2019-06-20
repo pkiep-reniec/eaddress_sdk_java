@@ -8,7 +8,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import pe.gob.reniec.eaddress.sdk.common.Acuse;
 import pe.gob.reniec.eaddress.sdk.common.Utils;
-import pe.gob.reniec.eaddress.sdk.dto.*;
+import pe.gob.reniec.eaddress.sdk.dto.Config;
+import pe.gob.reniec.eaddress.sdk.dto.NotificationResponse;
+import pe.gob.reniec.eaddress.sdk.dto.PaginatorLotNotifications;
+import pe.gob.reniec.eaddress.sdk.dto.SearchRequest;
 import pe.gob.reniec.eaddress.sdk.utils.ConvertResponse;
 import pe.gob.reniec.eaddress.sdk.utils.MySSLConnectionSocketFactory;
 
@@ -42,7 +45,7 @@ public class NotificationService {
 
     public PaginatorLotNotifications fetchAll(SearchRequest searchRequest) {
         try {
-            TokenResponse token = this.securityService.getToken();
+            String token = this.securityService.getToken();
 
             if (token != null) {
                 CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
@@ -53,7 +56,7 @@ public class NotificationService {
                 }
 
                 HttpGet request = new HttpGet(uriBuilder.build());
-                request.setHeader("Authorization", "Bearer ".concat(token.getAccessToken()));
+                request.setHeader("Authorization", "Bearer ".concat(token));
 
                 HttpResponse response = client.execute(request);
 
@@ -76,12 +79,12 @@ public class NotificationService {
 
     public NotificationResponse getOne(String id, String lotId) {
         try {
-            TokenResponse token = this.securityService.getToken();
+            String token = this.securityService.getToken();
 
             if (token != null) {
                 CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
                 HttpGet request = new HttpGet(this.config.getEaddressServiceUri().concat("/api/v1.0/notification/").concat(id).concat("/").concat(lotId));
-                request.setHeader("Authorization", "Bearer ".concat(token.getAccessToken()));
+                request.setHeader("Authorization", "Bearer ".concat(token));
 
                 HttpResponse response = client.execute(request);
 
@@ -104,13 +107,13 @@ public class NotificationService {
 
     public byte[] downloadAcuse(String id, String lotId, Acuse acuse) {
         try {
-            TokenResponse token = this.securityService.getToken();
+            String token = this.securityService.getToken();
 
             if (token != null) {
                 CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
                 HttpGet request = new HttpGet(this.config.getEaddressServiceUri().concat("/api/v1.0/notification/").concat(id).concat("/")
                         .concat(lotId).concat("/").concat(acuse.getAlias()));
-                request.setHeader("Authorization", "Bearer ".concat(token.getAccessToken()));
+                request.setHeader("Authorization", "Bearer ".concat(token));
 
                 HttpResponse response = client.execute(request);
 

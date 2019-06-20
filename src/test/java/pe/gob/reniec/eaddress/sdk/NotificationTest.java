@@ -26,10 +26,8 @@ public class NotificationTest {
         String configFile = getClass().getClassLoader().getResource("reniec_eaddress.json").getFile();
         reniecEAddressClient = new ReniecEAddressClient(configFile);
 
-//        notificationId = "";
-//        lotId = "";
-        notificationId = "5d09b726c7e35c1150664cc1";
-        lotId = "5d09b6a3c7e35c49dc526d6b";
+        notificationId = "";
+        lotId = "";
     }
 
     @Test
