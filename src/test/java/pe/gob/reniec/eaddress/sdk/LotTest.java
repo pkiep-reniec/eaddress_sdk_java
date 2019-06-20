@@ -22,8 +22,7 @@ public class LotTest {
         String configFile = getClass().getClassLoader().getResource("reniec_eaddress.json").getFile();
         reniecEAddressClient = new ReniecEAddressClient(configFile);
 
-//        lotId = "";
-        lotId = "5d09b6a3c7e35c49dc526d6b";
+        lotId = "";
     }
 
     @Test
