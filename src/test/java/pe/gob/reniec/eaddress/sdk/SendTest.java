@@ -25,7 +25,7 @@ public class SendTest {
     private ReniecEAddressClient reniecEAddressClient;
 
     @Before
-    public void before() throws IOException {
+    public void before() {
         ConfigAga oConfigAga = new ConfigAga();
         oConfigAga.setAgaUri("http://127.0.0.1:8080/refirma-aga/rest/service/sign-file");
         oConfigAga.setTimestamp("false");

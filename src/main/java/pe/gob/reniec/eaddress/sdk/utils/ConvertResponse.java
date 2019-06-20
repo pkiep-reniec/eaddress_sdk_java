@@ -25,23 +25,27 @@ public class ConvertResponse {
         return __instance;
     }
 
-    public Object convert(HttpResponse response, Class valueType) throws IOException {
+    public String convertToString(HttpResponse response) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
-        StringBuffer tokenEndpointBuffer = new StringBuffer();
+        StringBuffer stringBuffer = new StringBuffer();
         String line = "";
 
         while ((line = reader.readLine()) != null) {
-            tokenEndpointBuffer.append(line);
+            stringBuffer.append(line);
         }
 
         reader.close();
 
-        String tokenEndpoint = tokenEndpointBuffer.toString();
+        return stringBuffer.toString();
+    }
 
-        if (tokenEndpoint != null && !tokenEndpoint.isEmpty()) {
+    public Object convert(HttpResponse response, Class valueType) throws IOException {
+        String dataString = this.convertToString(response);
+
+        if (dataString != null && !dataString.isEmpty()) {
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(tokenEndpoint, valueType);
+            return mapper.readValue(dataString, valueType);
         } else {
             return null;
         }

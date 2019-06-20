@@ -1,29 +1,15 @@
 package pe.gob.reniec.eaddress.sdk;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.compress.utils.IOUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import pe.gob.reniec.eaddress.sdk.common.Constants;
-import pe.gob.reniec.eaddress.sdk.common.Utils;
+import pe.gob.reniec.eaddress.sdk.common.Acuse;
 import pe.gob.reniec.eaddress.sdk.dto.*;
-import pe.gob.reniec.eaddress.sdk.utils.ConvertResponse;
-import pe.gob.reniec.eaddress.sdk.utils.MySSLConnectionSocketFactory;
+import pe.gob.reniec.eaddress.sdk.service.LotService;
+import pe.gob.reniec.eaddress.sdk.service.NotificationService;
+import pe.gob.reniec.eaddress.sdk.service.SendService;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * @author Alexander Llacho
@@ -31,270 +17,73 @@ import java.util.List;
 public class ReniecEAddressClient {
 
     private Config config;
-    private ConfigAga configAga;
-    private String pathDir;
+    private ConfigAga configAga = null;
+    private SendService sendService;
+    private LotService lotService;
+    private NotificationService notificationService;
 
-    public ReniecEAddressClient(String configFile, ConfigAga oConfigAga) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        this.config = mapper.readValue(new File(configFile), Config.class);
-        this.configAga = oConfigAga;
+    public ReniecEAddressClient(String configFile, ConfigAga oConfigAga) {
+        this.setConfig(configFile, oConfigAga);
+    }
+
+    public ReniecEAddressClient(String configFile) {
+        this.setConfig(configFile, null);
     }
 
     public ApiResponse sendSingleNotification(Message oMessage) {
-        try {
-            this.pathDir = Utils.CreateTempDir();
-
-            Metadata metadata = createMetadata(oMessage, null, true);
-            File fileSignMetadata = signMetadata(metadata);
-
-            if (fileSignMetadata != null) {
-                TokenResponse token = getToken();
-
-                if (token != null) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    String jsonString = mapper.writeValueAsString(metadata);
-                    oMessage.setMetadata(jsonString);
-
-                    ApiResponse result = sendSingle(fileSignMetadata, oMessage, token.getAccessToken());
-
-                    if (result != null) {
-                        Utils.deleteDirectory(new File(pathDir));
-
-                        return result;
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            StringWriter sw = new StringWriter();
-            ex.printStackTrace(new PrintWriter(sw));
-
-            System.out.println(sw.toString());
+        if (this.configAga == null) {
+            return null;
         }
 
-        return null;
+        return this.sendService.procSingleNotification(oMessage);
     }
 
     public ApiResponse sendMassiveNotification(Message oMessage, File file) {
+        if (this.configAga == null) {
+            return null;
+        }
+
+        return this.sendService.procMassiveNotification(oMessage, file);
+    }
+
+    public PaginatorLot fetchAllLots(SearchRequest searchRequest) {
+        return this.lotService.fetchAll(searchRequest);
+    }
+
+    public PaginatorLotNotifications fetchLotNotifications(String lotId, SearchRequest searchRequest) {
+        return this.lotService.fetchNotifications(lotId, searchRequest);
+    }
+
+    public PaginatorLotNotifications fetchAllNotifications(SearchRequest searchRequest) {
+        return this.notificationService.fetchAll(searchRequest);
+    }
+
+    public NotificationResponse getNotification(String notificationId, String lotId) {
+        return this.notificationService.getOne(notificationId, lotId);
+    }
+
+    public byte[] downloadMetadata(String lotId) {
+        return this.lotService.downloadMetadata(lotId);
+    }
+
+    public byte[] downloadAcuse(String id, String lotId, Acuse acuse) {
+        return this.notificationService.downloadAcuse(id, lotId, acuse);
+    }
+
+    private void setConfig(String configFile, ConfigAga oConfigAga) {
         try {
-            this.pathDir = Utils.CreateTempDir();
-
-            Metadata metadata = createMetadata(oMessage, file, false);
-            File fileSign = signMetadata(metadata);
-
-            if (fileSign != null) {
-                //security service
-                TokenResponse token = getToken();
-
-                if (token != null) {
-                    //send
-                    ObjectMapper mapper = new ObjectMapper();
-                    String jsonString = mapper.writeValueAsString(metadata);
-                    oMessage.setMetadata(jsonString);
-
-                    ApiResponse result = sendMassive(fileSign, file, oMessage, token.getAccessToken());
-
-                    if (result != null) {
-                        Utils.deleteDirectory(new File(pathDir));
-
-                        return result;
-                    }
-                }
-            }
+            ObjectMapper mapper = new ObjectMapper();
+            this.config = mapper.readValue(new File(configFile), Config.class);
+            this.configAga = oConfigAga;
+            this.sendService = SendService.getInstance(this.config, this.configAga);
+            this.lotService = LotService.getInstance(this.config);
+            this.notificationService = NotificationService.getInstance(this.config);
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
             ex.printStackTrace(new PrintWriter(sw));
 
             System.out.println(sw.toString());
         }
-
-        return null;
-    }
-
-    private Metadata createMetadata(Message message, File fileCSV, Boolean single) throws Exception {
-        String line = "";
-        Integer count = single ? 1 : -1;
-
-        if (!single && fileCSV != null) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileCSV), StandardCharsets.UTF_8));
-
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (!line.equals("")) {
-                    count++;
-                }
-            }
-        }
-
-        if (count < 1) {
-            throw new Exception("Not File CSV: ");
-        }
-
-        Date date = new Date();
-
-        DataPerson oPerson = new DataPerson();
-        oPerson.setDocType(this.config.getDocType());
-        oPerson.setDoc(this.config.getDoc());
-        oPerson.setName(this.config.getName());
-
-        DataApp oApp = new DataApp();
-        oApp.setName(this.config.getAppName());
-        oApp.setClientId(this.config.getClientId());
-
-        Metadata metadata = new Metadata();
-        metadata.setIssuer(oPerson);
-        metadata.setApplication(oApp);
-        metadata.setSubject(message.getSubject());
-        metadata.setTag(message.getTag());
-        metadata.setQuantity(count);
-
-        String hashMessage = oPerson.getName().concat(oApp.getName()).concat(message.getSubject()).concat(String.valueOf(date.getTime())).concat(message.getMessage());
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hash = digest.digest(hashMessage.getBytes(StandardCharsets.UTF_8));
-        String sha256hex = Utils.bytesToHex(hash);
-        metadata.setContentHash(sha256hex);
-
-        return metadata;
-    }
-
-    private File signMetadata(Metadata metadata) {
-        File targetFile = new File(this.pathDir, Constants.FILE_SIGN);
-
-        try {
-            Utils.generateTempFiles(this.pathDir, this.configAga, metadata);
-
-            File fileZip = new File(this.pathDir, Constants.FILE_ZIP);
-            CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
-
-            HttpEntity entity = MultipartEntityBuilder
-                    .create()
-                    .addBinaryBody("uploadFile", fileZip, ContentType.create("application/octet-stream"), fileZip.getName())
-                    .build();
-
-            HttpPost post = new HttpPost(this.configAga.getAgaUri());
-            post.setEntity(entity);
-
-            HttpResponse response = client.execute(post);
-
-            if (response.getStatusLine().getStatusCode() == 200) {
-                try (FileOutputStream fos = new FileOutputStream(targetFile)) {
-                    fos.write(IOUtils.toByteArray(response.getEntity().getContent()));
-                }
-
-                return targetFile;
-            }
-        } catch (Exception ex) {
-            StringWriter sw = new StringWriter();
-            ex.printStackTrace(new PrintWriter(sw));
-
-            System.out.println(sw.toString());
-        }
-
-        return null;
-    }
-
-    private TokenResponse getToken() {
-        CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
-        HttpPost post = new HttpPost(this.config.getSecurityUri());
-
-        try {
-            List<NameValuePair> urlParameters = new ArrayList<>();
-            urlParameters.add(new BasicNameValuePair("grant_type", "client_credentials"));
-            urlParameters.add(new BasicNameValuePair("scope", "eaddress"));
-            urlParameters.add(new BasicNameValuePair("client_id", this.config.getClientId()));
-            urlParameters.add(new BasicNameValuePair("client_secret", this.config.getClientSecret()));
-
-            post.setEntity(new UrlEncodedFormEntity(urlParameters, StandardCharsets.UTF_8));
-
-            HttpResponse response = client.execute(post);
-
-            if (response.getStatusLine().getStatusCode() == 201) {
-                Object object = ConvertResponse.getInstance().convert(response, TokenResponse.class);
-
-                if (object != null) {
-                    TokenResponse tokenResponse = (TokenResponse) object;
-
-                    return tokenResponse;
-                }
-            }
-        } catch (Exception ex) {
-            StringWriter sw = new StringWriter();
-            ex.printStackTrace(new PrintWriter(sw));
-
-            System.out.println(sw.toString());
-        }
-
-        return null;
-    }
-
-    private ApiResponse sendSingle(File file, Message oMessage, String accessToken) {
-        try {
-            CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
-            HttpEntity entity = MultipartEntityBuilder
-                    .create()
-                    .addTextBody("doc", oMessage.getDoc())
-                    .addTextBody("docType", oMessage.getDocType())
-                    .addTextBody("subject", oMessage.getSubject())
-                    .addTextBody("message", oMessage.getMessage())
-                    .addTextBody("rep", oMessage.getRep() == null ? "" : oMessage.getRep())
-                    .addTextBody("tag", oMessage.getTag() == null ? "" : oMessage.getTag())
-                    .addTextBody("callback", oMessage.getCallback() == null ? "" : oMessage.getCallback())
-                    .addTextBody("attachments", oMessage.getAttachments() == null ? "" : oMessage.getAttachments())
-                    .addTextBody("metadata", oMessage.getMetadata())
-                    .addBinaryBody("fileSign", file, ContentType.create("application/octet-stream"), file.getName())
-                    .build();
-
-            HttpPost post = new HttpPost(this.config.getEaddressServiceUri().concat("/api/v1.0/send/single"));
-            post.setHeader("Authorization", "Bearer ".concat(accessToken));
-            post.setEntity(entity);
-
-            HttpResponse response = client.execute(post);
-            Object object = ConvertResponse.getInstance().convert(response, ApiResponse.class);
-
-            if (object != null) {
-                return (ApiResponse) object;
-            }
-        } catch (Exception ex) {
-            StringWriter sw = new StringWriter();
-            ex.printStackTrace(new PrintWriter(sw));
-
-            System.out.println(sw.toString());
-        }
-
-        return null;
-    }
-
-    private ApiResponse sendMassive(File file, File fileCSV, Message oMessage, String accessToken) {
-        try {
-            CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
-            HttpEntity entity = MultipartEntityBuilder
-                    .create()
-                    .addTextBody("subject", oMessage.getSubject())
-                    .addTextBody("message", oMessage.getMessage())
-                    .addTextBody("tag", oMessage.getTag() == null ? "" : oMessage.getTag())
-                    .addTextBody("callback", oMessage.getCallback() == null ? "" : oMessage.getCallback())
-                    .addTextBody("metadata", oMessage.getMetadata())
-                    .addBinaryBody("fileCSV", fileCSV, ContentType.create("application/octet-stream"), fileCSV.getName())
-                    .addBinaryBody("fileSign", file, ContentType.create("application/octet-stream"), file.getName())
-                    .build();
-
-            HttpPost post = new HttpPost(this.config.getEaddressServiceUri().concat("/api/v1.0/send/massive"));
-            post.setHeader("Authorization", "Bearer ".concat(accessToken));
-            post.setEntity(entity);
-
-            HttpResponse response = client.execute(post);
-            Object object = ConvertResponse.getInstance().convert(response, ApiResponse.class);
-
-            if (object != null) {
-                return (ApiResponse) object;
-            }
-        } catch (Exception ex) {
-            StringWriter sw = new StringWriter();
-            ex.printStackTrace(new PrintWriter(sw));
-
-            System.out.println(sw.toString());
-        }
-
-        return null;
     }
 
     public Config getConfig() {

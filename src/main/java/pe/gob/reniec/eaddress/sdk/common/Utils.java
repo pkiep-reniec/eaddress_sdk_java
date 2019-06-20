@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZMethod;
 import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
+import org.apache.http.client.utils.URIBuilder;
 import pe.gob.reniec.eaddress.sdk.dto.ConfigAga;
 import pe.gob.reniec.eaddress.sdk.dto.Metadata;
+import pe.gob.reniec.eaddress.sdk.dto.SearchRequest;
 
 import java.io.*;
 import java.util.*;
@@ -15,9 +17,21 @@ import java.util.*;
  */
 public class Utils {
 
+    private static Utils __instance = null;
     private static final String tempDir = System.getProperty("java.io.tmpdir").concat("\\temp_sign");
 
-    public static String bytesToHex(byte[] hash) {
+    private Utils() {
+    }
+
+    public static Utils getInstance() {
+        if (__instance == null) {
+            __instance = new Utils();
+        }
+
+        return __instance;
+    }
+
+    public String bytesToHex(byte[] hash) {
         StringBuffer hexString = new StringBuffer();
 
         for (int i = 0; i < hash.length; i++) {
@@ -29,7 +43,7 @@ public class Utils {
         return hexString.toString();
     }
 
-    public static String CreateTempDir() throws Exception {
+    public String createTempDir() throws Exception {
         int i = 0;
         String tmp = null;
 
@@ -38,7 +52,7 @@ public class Utils {
             tmp = mkdirTmp();
             if (tmp != null) i = 10;
         } while (i < 10);
-        
+
         return tmp;
     }
 
@@ -61,7 +75,7 @@ public class Utils {
         return tmp;
     }
 
-    public static void generateTempFiles(String tempDir, ConfigAga configAga, Metadata metadata) throws Exception {
+    public void generateTempFiles(String tempDir, ConfigAga configAga, Metadata metadata) throws Exception {
         //Generate JSON
         File jsonFile = new File(tempDir, Constants.JSON_METADATA);
         Writer fileWriterJSON = new FileWriter(jsonFile);
@@ -124,7 +138,7 @@ public class Utils {
         sevenZOutput.close();
     }
 
-    public static boolean deleteDirectory(File directoryToBeDeleted) {
+    public boolean deleteDirectory(File directoryToBeDeleted) {
         File[] allContents = directoryToBeDeleted.listFiles();
         if (allContents != null) {
             for (File file : allContents) {
@@ -134,4 +148,33 @@ public class Utils {
         return directoryToBeDeleted.delete();
     }
 
+    public URIBuilder convertToUriBuilder(SearchRequest searchRequest, String uri) {
+        try {
+            URIBuilder builder = new URIBuilder(uri);
+            builder = searchRequest.getPage() != null ? builder.setParameter("page", String.valueOf(searchRequest.getPage())) : builder;
+            builder = searchRequest.getCount() != null ? builder.setParameter("count", String.valueOf(searchRequest.getCount())) : builder;
+            builder = !isEmpty(searchRequest.getSort()) ? builder.setParameter("sort", String.valueOf(searchRequest.getSort())) : builder;
+            builder = !isEmpty(searchRequest.getName()) ? builder.setParameter("name", String.valueOf(searchRequest.getName())) : builder;
+            builder = !isEmpty(searchRequest.getDoc()) ? builder.setParameter("doc", String.valueOf(searchRequest.getDoc())) : builder;
+            builder = !isEmpty(searchRequest.getSubject()) ? builder.setParameter("subject", String.valueOf(searchRequest.getSubject())) : builder;
+            builder = !isEmpty(searchRequest.getTag()) ? builder.setParameter("tag", String.valueOf(searchRequest.getTag())) : builder;
+            builder = searchRequest.getStatus() != null ? builder.setParameter("status", String.valueOf(searchRequest.getStatus())) : builder;
+            builder = searchRequest.getDateBegin() != null ? builder.setParameter("dateBegin", String.valueOf(searchRequest.getDateBegin())) : builder;
+            builder = searchRequest.getDateEnd() != null ? builder.setParameter("dateEnd", String.valueOf(searchRequest.getDateEnd())) : builder;
+            builder = searchRequest.getFailed() != null ? builder.setParameter("failed", String.valueOf(searchRequest.getFailed())) : builder;
+
+            return builder;
+        } catch (Exception ex) {
+            StringWriter sw = new StringWriter();
+            ex.printStackTrace(new PrintWriter(sw));
+
+            System.out.println(sw.toString());
+        }
+
+        return null;
+    }
+
+    public boolean isEmpty(String s) {
+        return s == null || s.trim().isEmpty();
+    }
 }
