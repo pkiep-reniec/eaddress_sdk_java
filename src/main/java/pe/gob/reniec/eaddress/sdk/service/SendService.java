@@ -141,11 +141,7 @@ public class SendService {
             request.setEntity(entity);
 
             HttpResponse response = client.execute(request);
-            Object object = ConvertResponse.getInstance().convert(response, ApiResponse.class);
-
-            if (object != null) {
-                return (ApiResponse) object;
-            }
+            return convertResponse(response);
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
             ex.printStackTrace(new PrintWriter(sw));
@@ -175,11 +171,7 @@ public class SendService {
             request.setEntity(entity);
 
             HttpResponse response = client.execute(request);
-            Object object = ConvertResponse.getInstance().convert(response, ApiResponse.class);
-
-            if (object != null) {
-                return (ApiResponse) object;
-            }
+            return convertResponse(response);
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
             ex.printStackTrace(new PrintWriter(sw));
@@ -269,6 +261,20 @@ public class SendService {
             ex.printStackTrace(new PrintWriter(sw));
 
             System.out.println(sw.toString());
+        }
+
+        return null;
+    }
+
+    private ApiResponse convertResponse(HttpResponse response) throws IOException {
+        if (response.getStatusLine().getStatusCode() == 201) {
+            Object object = ConvertResponse.getInstance().convert(response, ApiResponse.class);
+
+            if (object != null) {
+                return (ApiResponse) object;
+            }
+        } else {
+            System.out.println(ConvertResponse.getInstance().convertToString(response));
         }
 
         return null;

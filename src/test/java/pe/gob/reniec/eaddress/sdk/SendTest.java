@@ -10,11 +10,10 @@ import pe.gob.reniec.eaddress.sdk.dto.Attachment;
 import pe.gob.reniec.eaddress.sdk.dto.ConfigAga;
 import pe.gob.reniec.eaddress.sdk.dto.Message;
 
-import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author Miguel Pazo (https://miguelpazo.com)
@@ -24,12 +23,15 @@ public class SendTest {
     private ReniecEAddressClient reniecEAddressClient;
 
     @Before
-    public void before() {
+    public void before() throws IOException {
+        Properties properties = new Properties();
+        properties.load(new FileReader(getClass().getClassLoader().getResource("application.properties").getFile()));
+
         ConfigAga oConfigAga = new ConfigAga();
-        oConfigAga.setAgaUri("");
-        oConfigAga.setTimestamp("");
-        oConfigAga.setCertificateId("");
-        oConfigAga.setSecretPassword("");
+        oConfigAga.setAgaUri(properties.getProperty("aga.uri"));
+        oConfigAga.setTimestamp(properties.getProperty("aga.timestamp"));
+        oConfigAga.setCertificateId(properties.getProperty("aga.certificate.id"));
+        oConfigAga.setSecretPassword(properties.getProperty("aga.password"));
 
         String configFile = getClass().getClassLoader().getResource("reniec_eaddress.json").getFile();
         reniecEAddressClient = new ReniecEAddressClient(configFile, oConfigAga);
