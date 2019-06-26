@@ -74,7 +74,7 @@ public class SendTest {
         String massiveCsv = getClass().getClassLoader().getResource("massive.csv").getFile();
 
         Message oMessage = new Message();
-        oMessage.setSubject("mensaje de prueba masiva");
+        oMessage.setSubject("mensaje de prueba masiva para [[nombres]]");
         oMessage.setMessage("<p>[[ruc]]</p>" +
                 "<p>[[nombres]]</p>" +
                 "<p>[[numero_orden]]</p>");
