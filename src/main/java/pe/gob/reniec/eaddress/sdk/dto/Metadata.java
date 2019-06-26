@@ -16,8 +16,8 @@ public class Metadata {
     private Integer quantity;
     @JsonProperty("aplicacion")
     private DataApp application;
-    @JsonProperty("content_hash")
-    private String contentHash;
+    @JsonProperty("checksum")
+    private String checksum;
 
     public Metadata() {
     }
@@ -70,12 +70,12 @@ public class Metadata {
         this.application = application;
     }
 
-    public String getContentHash() {
-        return contentHash;
+    public String getChecksum() {
+        return checksum;
     }
 
-    public void setContentHash(String contentHash) {
-        this.contentHash = contentHash;
+    public void setChecksum(String checksum) {
+        this.checksum = checksum;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class Metadata {
                 ", tag='" + tag + '\'' +
                 ", quantity=" + quantity +
                 ", application=" + application +
-                ", contentHash='" + contentHash + '\'' +
+                ", checksum='" + checksum + '\'' +
                 '}';
     }
 }

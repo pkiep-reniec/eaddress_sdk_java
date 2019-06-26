@@ -56,9 +56,13 @@ public class SendTest {
             ex.printStackTrace(new PrintWriter(sw));
         }
 
+//        oMessage.setDocType(Constants.TYPE_DOC_RUC);
+//        oMessage.setDoc("20100055237");
+//        oMessage.setRep("46256479,70273865");
         oMessage.setDocType(Constants.TYPE_DOC_DNI);
         oMessage.setDoc("70273865");
-        oMessage.setSubject("mensaje de prueba individual 2");
+
+        oMessage.setSubject("mensaje de prueba individual 222");
         oMessage.setMessage("<p>Hola <b>Mundo</b></p>");
         oMessage.setTag("tag");
 
@@ -74,8 +78,8 @@ public class SendTest {
         String massiveCsv = getClass().getClassLoader().getResource("massive.csv").getFile();
 
         Message oMessage = new Message();
-        oMessage.setSubject("mensaje de prueba masiva para [[nombres]]");
-        oMessage.setMessage("<p>[[ruc]]</p>" +
+        oMessage.setSubject("22 mensaje de prueba masiva para [[nombres]]");
+        oMessage.setMessage("<p></p>" +
                 "<p>[[nombres]]</p>" +
                 "<p>[[numero_orden]]</p>");
         oMessage.setTag("tag");

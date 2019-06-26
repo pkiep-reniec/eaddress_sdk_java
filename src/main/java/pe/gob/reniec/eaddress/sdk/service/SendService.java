@@ -18,6 +18,7 @@ import pe.gob.reniec.eaddress.sdk.utils.MySSLConnectionSocketFactory;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 /**
@@ -50,8 +51,12 @@ public class SendService {
     public ApiResponse procSingleNotification(Message oMessage) {
         try {
             String pathDir = utils.createTempDir();
-
             Metadata metadata = createMetadata(oMessage, null, true);
+
+            if (metadata == null) {
+                return null;
+            }
+
             File fileSignMetadata = signMetadata(metadata, pathDir);
 
             if (fileSignMetadata != null) {
@@ -88,8 +93,12 @@ public class SendService {
 
         try {
             String pathDir = utils.createTempDir();
-
             Metadata metadata = createMetadata(oMessage, file, false);
+
+            if (metadata == null) {
+                return null;
+            }
+
             File fileSign = signMetadata(metadata, pathDir);
 
             if (fileSign != null) {
@@ -182,23 +191,9 @@ public class SendService {
         return null;
     }
 
-    private Metadata createMetadata(Message message, File fileCSV, Boolean single) throws Exception {
-        String line = "";
-        Integer count = single ? 1 : -1;
-
-        if (!single && fileCSV != null) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileCSV), StandardCharsets.UTF_8));
-
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (!line.equals("")) {
-                    count++;
-                }
-            }
-        }
-
-        if (count < 1) {
-            throw new Exception("Not File CSV: ");
+    private Metadata createMetadata(Message message, File fileCsv, Boolean single) throws Exception {
+        if (!single && fileCsv == null) {
+            return null;
         }
 
         Date date = new Date();
@@ -217,13 +212,50 @@ public class SendService {
         metadata.setApplication(oApp);
         metadata.setSubject(message.getSubject());
         metadata.setTag(message.getTag());
-        metadata.setQuantity(count);
 
-        String hashMessage = oPerson.getName().concat(oApp.getName()).concat(message.getSubject()).concat(String.valueOf(date.getTime())).concat(message.getMessage());
+        if (single) {
+            String hashMessage = oPerson.getName().concat(oApp.getName()).concat(message.getSubject()).concat(String.valueOf(date.getTime())).concat(message.getMessage());
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(hashMessage.getBytes(StandardCharsets.UTF_8));
+            String sha256hex = utils.bytesToHex(hash);
+
+            metadata.setChecksum(sha256hex);
+            metadata.setQuantity(1);
+        } else {
+            Metadata metadataChecksum = getChecksum(fileCsv);
+
+            if (metadataChecksum == null) {
+                return null;
+            }
+
+            metadata.setChecksum(metadataChecksum.getChecksum());
+            metadata.setQuantity(metadataChecksum.getQuantity());
+        }
+
+        return metadata;
+    }
+
+    private Metadata getChecksum(File fileCsv) throws IOException, NoSuchAlgorithmException {
+        String line = "";
+        String content = "";
+        Integer count = -1;
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileCsv), StandardCharsets.UTF_8))) {
+            while ((line = br.readLine()) != null) {
+                content += line.trim();
+
+                if (!line.equals("")) {
+                    count++;
+                }
+            }
+        }
+
+        Metadata metadata = new Metadata();
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hash = digest.digest(hashMessage.getBytes(StandardCharsets.UTF_8));
-        String sha256hex = utils.bytesToHex(hash);
-        metadata.setContentHash(sha256hex);
+        byte[] hash = digest.digest(content.getBytes(StandardCharsets.UTF_8));
+
+        metadata.setChecksum(utils.bytesToHex(hash));
+        metadata.setQuantity(count);
 
         return metadata;
     }
