@@ -267,14 +267,18 @@ public class SendService {
     }
 
     private ApiResponse convertResponse(HttpResponse response) throws IOException {
-        if (response.getStatusLine().getStatusCode() == 201) {
+        try {
             Object object = ConvertResponse.getInstance().convert(response, ApiResponse.class);
 
             if (object != null) {
                 return (ApiResponse) object;
             }
-        } else {
+        } catch (Exception ex) {
             System.out.println(ConvertResponse.getInstance().convertToString(response));
+            StringWriter sw = new StringWriter();
+            ex.printStackTrace(new PrintWriter(sw));
+
+            System.out.println(sw.toString());
         }
 
         return null;

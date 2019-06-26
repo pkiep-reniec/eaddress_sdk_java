@@ -40,9 +40,9 @@ public class SendTest {
     @Test
     public void sendSingleTest() {
         List<Attachment> attachments = new ArrayList<>();
-        attachments.add(new Attachment("Archivo demo 1", "https://www.gob.pe/859-plataforma-de-autenticacion-id-peru"));
-        attachments.add(new Attachment("Archivo demo 2", "https://www.gob.pe/859-plataforma-de-autenticacion-id-peru"));
-        attachments.add(new Attachment("Archivo demo 3", "https://www.gob.pe/859-plataforma-de-autenticacion-id-peru"));
+//        attachments.add(new Attachment("Archivo demo 1", "https://www.gob.pe/859-plataforma-de-autenticacion-id-peru"));
+//        attachments.add(new Attachment("Archivo demo 2", "https://www.gob.pe/859-plataforma-de-autenticacion-id-peru"));
+//        attachments.add(new Attachment("Archivo demo 3", "https://www.gob.pe/859-plataforma-de-autenticacion-id-peru"));
 
         Message oMessage = new Message();
 
@@ -74,10 +74,10 @@ public class SendTest {
         String massiveCsv = getClass().getClassLoader().getResource("massive.csv").getFile();
 
         Message oMessage = new Message();
-        oMessage.setDocType(Constants.TYPE_DOC_DNI);
-        oMessage.setDoc("70273865");
         oMessage.setSubject("mensaje de prueba masiva");
-        oMessage.setMessage("<p>Hola <b>Mundo</b></p>");
+        oMessage.setMessage("<p>[[ruc]]</p>" +
+                "<p>[[nombres]]</p>" +
+                "<p>[[numero_orden]]</p>");
         oMessage.setTag("tag");
 
         ApiResponse result = reniecEAddressClient.sendMassiveNotification(oMessage, new File(massiveCsv));
