@@ -3,9 +3,8 @@ package pe.gob.reniec.eaddress.sdk.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpResponse;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Miguel Pazo (http://miguelpazo.com)
@@ -26,16 +25,14 @@ public class ConvertResponse {
     }
 
     public String convertToString(HttpResponse response) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-
         StringBuffer stringBuffer = new StringBuffer();
         String line = "";
 
-        while ((line = reader.readLine()) != null) {
-            stringBuffer.append(line);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
+            while ((line = reader.readLine()) != null) {
+                stringBuffer.append(line);
+            }
         }
-
-        reader.close();
 
         return stringBuffer.toString();
     }
@@ -43,11 +40,15 @@ public class ConvertResponse {
     public Object convert(HttpResponse response, Class valueType) throws IOException {
         String dataString = this.convertToString(response);
 
-        if (dataString != null && !dataString.isEmpty()) {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(dataString, valueType);
-        } else {
-            return null;
+        try {
+            if (dataString != null && !dataString.isEmpty()) {
+                ObjectMapper mapper = new ObjectMapper();
+                return mapper.readValue(dataString, valueType);
+            }
+        } catch (Exception ex) {
+            return dataString;
         }
+
+        return null;
     }
 }

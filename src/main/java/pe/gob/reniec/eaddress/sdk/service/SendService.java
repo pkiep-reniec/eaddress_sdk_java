@@ -302,8 +302,10 @@ public class SendService {
         try {
             Object object = ConvertResponse.getInstance().convert(response, ApiResponse.class);
 
-            if (object != null) {
+            if (!object.getClass().equals(String.class)) {
                 return (ApiResponse) object;
+            } else {
+                System.out.println(object);
             }
         } catch (Exception ex) {
             System.out.println(ConvertResponse.getInstance().convertToString(response));
