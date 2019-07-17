@@ -10,6 +10,7 @@ import pe.gob.reniec.eaddress.sdk.service.SendService;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.List;
 
 /**
  * @author Alexander Llacho
@@ -30,9 +31,19 @@ public class ReniecEAddressClient {
         this.setConfig(configFile, null);
     }
 
-    public ApiResponse sendSingleNotification(Message oMessage) {
+    public ApiResponse sendSingleNotification(Message oMessage, List<Attachment> attachments) {
         if (this.configAga == null) {
             return null;
+        }
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonAttachments = objectMapper.writeValueAsString(attachments);
+
+            oMessage.setAttachments(jsonAttachments);
+        } catch (Exception ex) {
+            StringWriter sw = new StringWriter();
+            ex.printStackTrace(new PrintWriter(sw));
         }
 
         return this.sendService.procSingleNotification(oMessage);

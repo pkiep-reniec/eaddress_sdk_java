@@ -1,6 +1,5 @@
 package pe.gob.reniec.eaddress.sdk;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +9,9 @@ import pe.gob.reniec.eaddress.sdk.dto.Attachment;
 import pe.gob.reniec.eaddress.sdk.dto.ConfigAga;
 import pe.gob.reniec.eaddress.sdk.dto.Message;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -45,17 +46,6 @@ public class SendTest {
         attachments.add(new Attachment("Archivo demo 3", "https://www.gob.pe/859-plataforma-de-autenticacion-id-peru"));
 
         Message oMessage = new Message();
-
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonAttachments = objectMapper.writeValueAsString(attachments);
-
-            oMessage.setAttachments(jsonAttachments);
-        } catch (Exception ex) {
-            StringWriter sw = new StringWriter();
-            ex.printStackTrace(new PrintWriter(sw));
-        }
-
 //        oMessage.setDocType(Constants.TYPE_DOC_RUC);
 //        oMessage.setDoc("20100055237");
 //        oMessage.setRep("46256479,70273865");
@@ -66,7 +56,7 @@ public class SendTest {
         oMessage.setMessage("<p>Hola <b>Mundo</b></p>");
         oMessage.setTag("tag");
 
-        ApiResponse result = reniecEAddressClient.sendSingleNotification(oMessage);
+        ApiResponse result = reniecEAddressClient.sendSingleNotification(oMessage, attachments);
 
         System.out.println(result);
 
