@@ -55,12 +55,12 @@ public class LotService {
                 request.setHeader("Authorization", "Bearer ".concat(token));
 
                 HttpResponse response = client.execute(request);
+                Object object = ConvertResponse.getInstance().convert(response, PaginatorLot.class);
 
-                if (response.getStatusLine().getStatusCode() == 200) {
-                    Object object = ConvertResponse.getInstance().convert(response, PaginatorLot.class);
+                if (!object.getClass().equals(String.class)) {
                     return (PaginatorLot) object;
                 } else {
-                    System.out.println(ConvertResponse.getInstance().convertToString(response));
+                    System.out.println(object);
                 }
             }
         } catch (Exception ex) {
@@ -89,12 +89,12 @@ public class LotService {
                 request.setHeader("Authorization", "Bearer ".concat(token));
 
                 HttpResponse response = client.execute(request);
+                Object object = ConvertResponse.getInstance().convert(response, PaginatorLotNotifications.class);
 
-                if (response.getStatusLine().getStatusCode() == 200) {
-                    Object object = ConvertResponse.getInstance().convert(response, PaginatorLotNotifications.class);
+                if (!object.getClass().equals(String.class)) {
                     return (PaginatorLotNotifications) object;
                 } else {
-                    System.out.println(ConvertResponse.getInstance().convertToString(response));
+                    System.out.println(object);
                 }
             }
         } catch (Exception ex) {
