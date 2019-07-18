@@ -31,16 +31,22 @@ public class ReniecEAddressClient {
         this.setConfig(configFile, null);
     }
 
+    public ApiResponse sendSingleNotification(Message oMessage) {
+        return this.sendSingleNotification(oMessage, null);
+    }
+
     public ApiResponse sendSingleNotification(Message oMessage, List<Attachment> attachments) {
         if (this.configAga == null) {
             return null;
         }
 
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonAttachments = objectMapper.writeValueAsString(attachments);
+            if (attachments != null) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                String jsonAttachments = objectMapper.writeValueAsString(attachments);
 
-            oMessage.setAttachments(jsonAttachments);
+                oMessage.setAttachments(jsonAttachments);
+            }
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
             ex.printStackTrace(new PrintWriter(sw));
