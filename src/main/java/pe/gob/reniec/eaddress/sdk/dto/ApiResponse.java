@@ -13,6 +13,12 @@ public class ApiResponse {
         this.success = false;
     }
 
+    public ApiResponse(String message) {
+        this.success = false;
+        this.code = 500;
+        this.message = message;
+    }
+
     public Boolean getSuccess() {
         return success;
     }

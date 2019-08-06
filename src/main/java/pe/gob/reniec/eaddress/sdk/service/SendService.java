@@ -10,6 +10,7 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import pe.gob.reniec.eaddress.sdk.common.Constants;
+import pe.gob.reniec.eaddress.sdk.common.Messages;
 import pe.gob.reniec.eaddress.sdk.common.Utils;
 import pe.gob.reniec.eaddress.sdk.dto.*;
 import pe.gob.reniec.eaddress.sdk.utils.ConvertResponse;
@@ -51,10 +52,15 @@ public class SendService {
     public ApiResponse procSingleNotification(Message oMessage) {
         try {
             String pathDir = utils.createTempDir();
+
+            if (pathDir == null) {
+                return new ApiResponse(Messages.ERROR_CREATING_TEMP_DIR);
+            }
+
             Metadata metadata = createMetadata(oMessage, null, true);
 
             if (metadata == null) {
-                return null;
+                return new ApiResponse(Messages.ERROR_SIGNING_METADATA);
             }
 
             File fileSignMetadata = signMetadata(metadata, pathDir);
@@ -83,20 +89,25 @@ public class SendService {
             System.out.println(sw.toString());
         }
 
-        return null;
+        return new ApiResponse(Messages.UNEXPECTED_ERROR);
     }
 
     public ApiResponse procMassiveNotification(Message oMessage, File file) {
         if (this.configAga == null) {
-            return null;
+            return new ApiResponse(Messages.NO_CONFIG_AGA);
         }
 
         try {
             String pathDir = utils.createTempDir();
+
+            if (pathDir == null) {
+                return new ApiResponse(Messages.ERROR_CREATING_TEMP_DIR);
+            }
+
             Metadata metadata = createMetadata(oMessage, file, false);
 
             if (metadata == null) {
-                return null;
+                return new ApiResponse(Messages.ERROR_SIGNING_METADATA);
             }
 
             File fileSign = signMetadata(metadata, pathDir);
@@ -125,7 +136,7 @@ public class SendService {
             System.out.println(sw.toString());
         }
 
-        return null;
+        return new ApiResponse(Messages.UNEXPECTED_ERROR);
     }
 
     private ApiResponse sendSingle(File file, Message oMessage, String accessToken) {

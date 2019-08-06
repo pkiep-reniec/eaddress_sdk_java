@@ -36,10 +36,6 @@ public class ReniecEAddressClient {
     }
 
     public ApiResponse sendSingleNotification(Message oMessage, List<Attachment> attachments) {
-        if (this.configAga == null) {
-            return null;
-        }
-
         try {
             if (attachments != null) {
                 ObjectMapper objectMapper = new ObjectMapper();
@@ -56,10 +52,6 @@ public class ReniecEAddressClient {
     }
 
     public ApiResponse sendMassiveNotification(Message oMessage, File file) {
-        if (this.configAga == null) {
-            return null;
-        }
-
         return this.sendService.procMassiveNotification(oMessage, file);
     }
 

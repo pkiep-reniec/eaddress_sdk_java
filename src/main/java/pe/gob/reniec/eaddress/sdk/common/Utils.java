@@ -18,7 +18,7 @@ import java.util.*;
 public class Utils {
 
     private static Utils __instance = null;
-    private static final String tempDir = System.getProperty("java.io.tmpdir").concat("\\temp_sign");
+    private static final String tempDir = System.getProperty("java.io.tmpdir").concat(File.separator).concat("temp_sign");
 
     private Utils() {
     }
@@ -43,7 +43,7 @@ public class Utils {
         return hexString.toString();
     }
 
-    public String createTempDir() throws Exception {
+    public String createTempDir() {
         int i = 0;
         String tmp = null;
 
@@ -56,22 +56,28 @@ public class Utils {
         return tmp;
     }
 
-    private static String mkdirTmp() throws Exception {
+    private String mkdirTmp() {
         String tmp = null;
         File file = new File(tempDir);
-        if (!file.exists()) {
-            if (!file.mkdir()) {
-                throw new Exception("Directorio temporal principal no creado: " + file.getPath());
 
-            }
-        }
-        file = new File(file.getPath(), UUID.randomUUID().toString());
         if (!file.exists()) {
             if (!file.mkdir()) {
-                throw new Exception("Directorio temporal no creado: " + file.getPath());
+                System.out.println("Directorio temporal principal no creado: ".concat(file.getPath()));
+                return null;
             }
         }
+
+        file = new File(file.getPath(), UUID.randomUUID().toString());
+
+        if (!file.exists()) {
+            if (!file.mkdir()) {
+                System.out.println("Directorio temporal no creado: ".concat(file.getPath()));
+                return null;
+            }
+        }
+
         tmp = file.getPath();
+
         return tmp;
     }
 
@@ -114,7 +120,7 @@ public class Utils {
         create7z(tempDir, jsonFile, paramFile);
     }
 
-    private static void create7z(String tempDir, File jsonFile, File paramFile) throws Exception {
+    private void create7z(String tempDir, File jsonFile, File paramFile) throws Exception {
         List<File> filesTo7Z = new ArrayList<>();
         filesTo7Z.add(jsonFile);
         filesTo7Z.add(paramFile);
