@@ -35,7 +35,7 @@ public class SendTest {
         oConfigAga.setSecretPassword(properties.getProperty("aga.password"));
 
         String configFile = getClass().getClassLoader().getResource("reniec_eaddress.json").getFile();
-        reniecEAddressClient = new ReniecEAddressClient(configFile, null);
+        reniecEAddressClient = new ReniecEAddressClient(configFile, oConfigAga);
     }
 
     @Test
