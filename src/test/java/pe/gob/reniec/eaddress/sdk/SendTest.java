@@ -35,7 +35,7 @@ public class SendTest {
         oConfigAga.setSecretPassword(properties.getProperty("aga.password"));
 
         String configFile = getClass().getClassLoader().getResource("reniec_eaddress.json").getFile();
-        reniecEAddressClient = new ReniecEAddressClient(configFile, null);
+        reniecEAddressClient = new ReniecEAddressClient(configFile, oConfigAga);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class SendTest {
         oMessage.setDocType(Constants.TYPE_DOC_DNI);
         oMessage.setDoc("70273865");
 
-        oMessage.setSubject("mensaje de prueba individual 222");
+        oMessage.setSubject("mensaje de prueba individual 666");
         oMessage.setMessage("<p>Hola <b>Mundo</b></p>");
         oMessage.setTag("tag");
 
