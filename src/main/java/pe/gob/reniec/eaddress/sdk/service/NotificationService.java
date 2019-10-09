@@ -8,10 +8,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import pe.gob.reniec.eaddress.sdk.common.Acuse;
 import pe.gob.reniec.eaddress.sdk.common.Utils;
-import pe.gob.reniec.eaddress.sdk.dto.Config;
-import pe.gob.reniec.eaddress.sdk.dto.NotificationResponse;
-import pe.gob.reniec.eaddress.sdk.dto.PaginatorLotNotifications;
-import pe.gob.reniec.eaddress.sdk.dto.SearchRequest;
+import pe.gob.reniec.eaddress.sdk.dto.*;
 import pe.gob.reniec.eaddress.sdk.utils.ConvertResponse;
 import pe.gob.reniec.eaddress.sdk.utils.MySSLConnectionSocketFactory;
 
@@ -43,7 +40,7 @@ public class NotificationService {
         return __instance;
     }
 
-    public PaginatorLotNotifications fetchAll(SearchRequest searchRequest) {
+    public ApiPaginatorLotNotifications fetchAll(SearchRequest searchRequest) {
         try {
             String token = this.securityService.getToken();
 
@@ -59,10 +56,10 @@ public class NotificationService {
                 request.setHeader("Authorization", "Bearer ".concat(token));
 
                 HttpResponse response = client.execute(request);
-                Object object = ConvertResponse.getInstance().convert(response, PaginatorLotNotifications.class);
+                Object object = ConvertResponse.getInstance().convert(response, ApiPaginatorLotNotifications.class);
 
                 if (!object.getClass().equals(String.class)) {
-                    return (PaginatorLotNotifications) object;
+                    return (ApiPaginatorLotNotifications) object;
                 } else {
                     System.out.println(object);
                 }
@@ -77,7 +74,7 @@ public class NotificationService {
         return null;
     }
 
-    public NotificationResponse getOne(String id, String lotId) {
+    public ApiNotificationResponse getOne(String id, String lotId) {
         try {
             String token = this.securityService.getToken();
 
@@ -87,10 +84,10 @@ public class NotificationService {
                 request.setHeader("Authorization", "Bearer ".concat(token));
 
                 HttpResponse response = client.execute(request);
-                Object object = ConvertResponse.getInstance().convert(response, NotificationResponse.class);
+                Object object = ConvertResponse.getInstance().convert(response, ApiNotificationResponse.class);
 
                 if (!object.getClass().equals(String.class)) {
-                    return (NotificationResponse) object;
+                    return (ApiNotificationResponse) object;
                 } else {
                     System.out.println(object);
                 }

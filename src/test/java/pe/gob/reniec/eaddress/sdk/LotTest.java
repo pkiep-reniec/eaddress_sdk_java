@@ -22,7 +22,7 @@ public class LotTest {
         String configFile = getClass().getClassLoader().getResource("reniec_eaddress.json").getFile();
         reniecEAddressClient = new ReniecEAddressClient(configFile);
 
-        lotId = "";
+        lotId = "5d8d2a36c89b4711655603e5";
     }
 
     @Test
@@ -44,11 +44,12 @@ public class LotTest {
         SearchRequest searchRequest = new SearchRequest();
         searchRequest.setPage(1);
         searchRequest.setCount(20);
-        PaginatorLotNotifications paginatorLotNotifications = reniecEAddressClient.fetchLotNotifications(lotId, searchRequest);
+        searchRequest.setStatus(null);
+        ApiPaginatorLotNotifications paginatorLotNotifications = reniecEAddressClient.fetchLotNotifications(lotId, searchRequest);
 
         System.out.println(paginatorLotNotifications.getRecordsTotal());
 
-        for (NotificationResponse notificationResponse : paginatorLotNotifications.getNotifications()) {
+        for (NotificationsResponse notificationResponse : paginatorLotNotifications.getNotifications()) {
             System.out.println(notificationResponse.toString());
         }
 

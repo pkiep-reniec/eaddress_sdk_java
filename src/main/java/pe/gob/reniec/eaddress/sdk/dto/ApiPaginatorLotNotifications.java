@@ -3,11 +3,11 @@ package pe.gob.reniec.eaddress.sdk.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaginatorLotNotifications {
+public class ApiPaginatorLotNotifications {
     private Integer recordsTotal;
-    private List<NotificationResponse> notifications;
+    private List<NotificationsResponse> notifications;
 
-    public PaginatorLotNotifications() {
+    public ApiPaginatorLotNotifications() {
         this.recordsTotal = 0;
         this.notifications = new ArrayList<>();
     }
@@ -20,11 +20,11 @@ public class PaginatorLotNotifications {
         this.recordsTotal = recordsTotal;
     }
 
-    public List<NotificationResponse> getNotifications() {
+    public List<NotificationsResponse> getNotifications() {
         return notifications;
     }
 
-    public void setNotifications(List<NotificationResponse> notifications) {
+    public void setNotifications(List<NotificationsResponse> notifications) {
         this.notifications = notifications;
     }
 

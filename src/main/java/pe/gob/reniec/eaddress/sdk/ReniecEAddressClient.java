@@ -59,15 +59,15 @@ public class ReniecEAddressClient {
         return this.lotService.fetchAll(searchRequest);
     }
 
-    public PaginatorLotNotifications fetchLotNotifications(String lotId, SearchRequest searchRequest) {
+    public ApiPaginatorLotNotifications fetchLotNotifications(String lotId, SearchRequest searchRequest) {
         return this.lotService.fetchNotifications(lotId, searchRequest);
     }
 
-    public PaginatorLotNotifications fetchAllNotifications(SearchRequest searchRequest) {
+    public ApiPaginatorLotNotifications fetchAllNotifications(SearchRequest searchRequest) {
         return this.notificationService.fetchAll(searchRequest);
     }
 
-    public NotificationResponse getNotification(String notificationId, String lotId) {
+    public ApiNotificationResponse getNotification(String notificationId, String lotId) {
         return this.notificationService.getOne(notificationId, lotId);
     }
 

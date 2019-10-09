@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author Alexander Llacho
  */
-public class NotificationResponse {
+public class ApiNotificationResponse {
 
     private String id;
     private String lotId;
@@ -13,29 +13,23 @@ public class NotificationResponse {
     private String issuerDoc;
     private String issuerDocType;
     private String issuerName;
-    private String issuerNameShort;
-    private String issuerIcon;
     private String receiverDoc;
     private String receiverDocType;
     private String receiverName;
-    private Integer serviceId;
     private String subject;
     private String messageHtml;
-    private Boolean important;
     private Long sentAt;
     private String jsonSent;
-    private String jsonSentSignature;
     private Long receivedAt;
     private String jsonReceived;
-    private String jsonReceivedSignature;
     private Long readAt;
-    private Integer readCount;
+    private String jsonRead;
     private String code;
     private String errorReason;
     private List<Attachment> attachments;
     private Long createdAt;
 
-    public NotificationResponse() {
+    public ApiNotificationResponse() {
     }
 
     public String getId() {
@@ -86,22 +80,6 @@ public class NotificationResponse {
         this.issuerName = issuerName;
     }
 
-    public String getIssuerNameShort() {
-        return issuerNameShort;
-    }
-
-    public void setIssuerNameShort(String issuerNameShort) {
-        this.issuerNameShort = issuerNameShort;
-    }
-
-    public String getIssuerIcon() {
-        return issuerIcon;
-    }
-
-    public void setIssuerIcon(String issuerIcon) {
-        this.issuerIcon = issuerIcon;
-    }
-
     public String getReceiverDoc() {
         return receiverDoc;
     }
@@ -126,14 +104,6 @@ public class NotificationResponse {
         this.receiverName = receiverName;
     }
 
-    public Integer getServiceId() {
-        return serviceId;
-    }
-
-    public void setServiceId(Integer serviceId) {
-        this.serviceId = serviceId;
-    }
-
     public String getSubject() {
         return subject;
     }
@@ -148,14 +118,6 @@ public class NotificationResponse {
 
     public void setMessageHtml(String messageHtml) {
         this.messageHtml = messageHtml;
-    }
-
-    public Boolean getImportant() {
-        return important;
-    }
-
-    public void setImportant(Boolean important) {
-        this.important = important;
     }
 
     public Long getSentAt() {
@@ -174,14 +136,6 @@ public class NotificationResponse {
         this.jsonSent = jsonSent;
     }
 
-    public String getJsonSentSignature() {
-        return jsonSentSignature;
-    }
-
-    public void setJsonSentSignature(String jsonSentSignature) {
-        this.jsonSentSignature = jsonSentSignature;
-    }
-
     public Long getReceivedAt() {
         return receivedAt;
     }
@@ -198,14 +152,6 @@ public class NotificationResponse {
         this.jsonReceived = jsonReceived;
     }
 
-    public String getJsonReceivedSignature() {
-        return jsonReceivedSignature;
-    }
-
-    public void setJsonReceivedSignature(String jsonReceivedSignature) {
-        this.jsonReceivedSignature = jsonReceivedSignature;
-    }
-
     public Long getReadAt() {
         return readAt;
     }
@@ -214,12 +160,12 @@ public class NotificationResponse {
         this.readAt = readAt;
     }
 
-    public Integer getReadCount() {
-        return readCount;
+    public String getJsonRead() {
+        return jsonRead;
     }
 
-    public void setReadCount(Integer readCount) {
-        this.readCount = readCount;
+    public void setJsonRead(String jsonRead) {
+        this.jsonRead = jsonRead;
     }
 
     public String getCode() {
@@ -256,30 +202,24 @@ public class NotificationResponse {
 
     @Override
     public String toString() {
-        return "NotificationResponse{" +
+        return "ApiNotificationResponse{" +
                 "id='" + id + '\'' +
                 ", lotId='" + lotId + '\'' +
                 ", tag='" + tag + '\'' +
                 ", issuerDoc='" + issuerDoc + '\'' +
                 ", issuerDocType='" + issuerDocType + '\'' +
                 ", issuerName='" + issuerName + '\'' +
-                ", issuerNameShort='" + issuerNameShort + '\'' +
-                ", issuerIcon='" + issuerIcon + '\'' +
                 ", receiverDoc='" + receiverDoc + '\'' +
                 ", receiverDocType='" + receiverDocType + '\'' +
                 ", receiverName='" + receiverName + '\'' +
-                ", serviceId=" + serviceId +
                 ", subject='" + subject + '\'' +
                 ", messageHtml='" + messageHtml + '\'' +
-                ", important=" + important +
                 ", sentAt=" + sentAt +
                 ", jsonSent='" + jsonSent + '\'' +
-                ", jsonSentSignature='" + jsonSentSignature + '\'' +
                 ", receivedAt=" + receivedAt +
                 ", jsonReceived='" + jsonReceived + '\'' +
-                ", jsonReceivedSignature='" + jsonReceivedSignature + '\'' +
                 ", readAt=" + readAt +
-                ", readCount=" + readCount +
+                ", jsonRead='" + jsonRead + '\'' +
                 ", code='" + code + '\'' +
                 ", errorReason='" + errorReason + '\'' +
                 ", attachments=" + attachments +

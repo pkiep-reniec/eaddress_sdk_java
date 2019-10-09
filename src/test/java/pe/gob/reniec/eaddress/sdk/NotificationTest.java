@@ -4,8 +4,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import pe.gob.reniec.eaddress.sdk.common.Acuse;
-import pe.gob.reniec.eaddress.sdk.dto.NotificationResponse;
-import pe.gob.reniec.eaddress.sdk.dto.PaginatorLotNotifications;
+import pe.gob.reniec.eaddress.sdk.dto.ApiNotificationResponse;
+import pe.gob.reniec.eaddress.sdk.dto.ApiPaginatorLotNotifications;
+import pe.gob.reniec.eaddress.sdk.dto.NotificationsResponse;
 import pe.gob.reniec.eaddress.sdk.dto.SearchRequest;
 
 import java.io.FileOutputStream;
@@ -26,8 +27,8 @@ public class NotificationTest {
         String configFile = getClass().getClassLoader().getResource("reniec_eaddress.json").getFile();
         reniecEAddressClient = new ReniecEAddressClient(configFile);
 
-        notificationId = "";
-        lotId = "";
+        notificationId = "5d8d2a39c89b471284d34e36";
+        lotId = "5d8d2a36c89b4711655603e5";
     }
 
     @Test
@@ -35,12 +36,12 @@ public class NotificationTest {
         SearchRequest searchRequest = new SearchRequest();
         searchRequest.setPage(1);
         searchRequest.setCount(5);
-        searchRequest.setName("miguel");
-        PaginatorLotNotifications notifications = reniecEAddressClient.fetchAllNotifications(searchRequest);
+//        searchRequest.setName("miguel");
+        ApiPaginatorLotNotifications notifications = reniecEAddressClient.fetchAllNotifications(searchRequest);
 
         System.out.println(notifications.getRecordsTotal());
 
-        for (NotificationResponse notification : notifications.getNotifications()) {
+        for (NotificationsResponse notification : notifications.getNotifications()) {
             System.out.println(notification.toString());
         }
 
@@ -49,7 +50,7 @@ public class NotificationTest {
 
     @Test
     public void getNotificationTest() {
-        NotificationResponse notification = reniecEAddressClient.getNotification(notificationId, lotId);
+        ApiNotificationResponse notification = reniecEAddressClient.getNotification(notificationId, lotId);
         System.out.println(notification.toString());
 
         Assert.assertNotNull(notification);

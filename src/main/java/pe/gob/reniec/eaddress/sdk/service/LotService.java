@@ -73,7 +73,7 @@ public class LotService {
         return null;
     }
 
-    public PaginatorLotNotifications fetchNotifications(String lotId, SearchRequest searchRequest) {
+    public ApiPaginatorLotNotifications fetchNotifications(String lotId, SearchRequest searchRequest) {
         try {
             String token = this.securityService.getToken();
 
@@ -89,10 +89,10 @@ public class LotService {
                 request.setHeader("Authorization", "Bearer ".concat(token));
 
                 HttpResponse response = client.execute(request);
-                Object object = ConvertResponse.getInstance().convert(response, PaginatorLotNotifications.class);
+                Object object = ConvertResponse.getInstance().convert(response, ApiPaginatorLotNotifications.class);
 
                 if (!object.getClass().equals(String.class)) {
-                    return (PaginatorLotNotifications) object;
+                    return (ApiPaginatorLotNotifications) object;
                 } else {
                     System.out.println(object);
                 }
