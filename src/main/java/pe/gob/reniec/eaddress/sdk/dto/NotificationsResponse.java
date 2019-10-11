@@ -21,6 +21,7 @@ public class NotificationsResponse {
     private String errorReason;
     private Boolean withAttachments;
     private Long createdAt;
+    private String link;
 
     public NotificationsResponse() {
     }
@@ -129,14 +130,6 @@ public class NotificationsResponse {
         this.readAt = readAt;
     }
 
-//    public String getCode() {
-//        return code;
-//    }
-//
-//    public void setCode(String code) {
-//        this.code = code;
-//    }
-
     public String getErrorReason() {
         return errorReason;
     }
@@ -161,6 +154,14 @@ public class NotificationsResponse {
         this.createdAt = createdAt;
     }
 
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
     @Override
     public String toString() {
         return "NotificationsResponse{" +
@@ -180,6 +181,7 @@ public class NotificationsResponse {
                 ", errorReason='" + errorReason + '\'' +
                 ", withAttachments=" + withAttachments +
                 ", createdAt=" + createdAt +
+                ", link='" + link + '\'' +
                 '}';
     }
 }

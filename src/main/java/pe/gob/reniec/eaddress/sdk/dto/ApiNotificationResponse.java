@@ -28,6 +28,7 @@ public class ApiNotificationResponse {
     private String errorReason;
     private List<Attachment> attachments;
     private Long createdAt;
+    private String link;
 
     public ApiNotificationResponse() {
     }
@@ -200,6 +201,14 @@ public class ApiNotificationResponse {
         this.createdAt = createdAt;
     }
 
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
     @Override
     public String toString() {
         return "ApiNotificationResponse{" +
@@ -224,6 +233,7 @@ public class ApiNotificationResponse {
                 ", errorReason='" + errorReason + '\'' +
                 ", attachments=" + attachments +
                 ", createdAt=" + createdAt +
+                ", link='" + link + '\'' +
                 '}';
     }
 }

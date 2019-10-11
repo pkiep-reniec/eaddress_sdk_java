@@ -35,7 +35,7 @@ public class NotificationTest {
     public void fetchAllNotificationsTest() {
         SearchRequest searchRequest = new SearchRequest();
         searchRequest.setPage(1);
-        searchRequest.setCount(5);
+        searchRequest.setCount(50);
 //        searchRequest.setName("miguel");
         ApiPaginatorLotNotifications notifications = reniecEAddressClient.fetchAllNotifications(searchRequest);
 
