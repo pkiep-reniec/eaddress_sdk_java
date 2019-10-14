@@ -46,7 +46,7 @@ public class NotificationService {
 
             if (token != null) {
                 CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
-                URIBuilder uriBuilder = utils.convertToUriBuilder(searchRequest, this.config.getEaddressServiceUri().concat("/api/v1.0/notification"));
+                URIBuilder uriBuilder = utils.convertToUriBuilder(searchRequest, this.config.getEaddressUri().concat("/api/v1.0/notification"));
 
                 if (uriBuilder == null) {
                     return null;
@@ -80,7 +80,7 @@ public class NotificationService {
 
             if (token != null) {
                 CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
-                HttpGet request = new HttpGet(this.config.getEaddressServiceUri().concat("/api/v1.0/notification/").concat(id).concat("/").concat(lotId));
+                HttpGet request = new HttpGet(this.config.getEaddressUri().concat("/api/v1.0/notification/").concat(id).concat("/").concat(lotId));
                 request.setHeader("Authorization", "Bearer ".concat(token));
 
                 HttpResponse response = client.execute(request);
@@ -108,7 +108,7 @@ public class NotificationService {
 
             if (token != null) {
                 CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
-                HttpGet request = new HttpGet(this.config.getEaddressServiceUri().concat("/api/v1.0/notification/").concat(id).concat("/")
+                HttpGet request = new HttpGet(this.config.getEaddressUri().concat("/api/v1.0/notification/").concat(id).concat("/")
                         .concat(lotId).concat("/").concat(acuse.getAlias()));
                 request.setHeader("Authorization", "Bearer ".concat(token));
 

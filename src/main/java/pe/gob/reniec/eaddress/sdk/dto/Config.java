@@ -13,8 +13,8 @@ public class Config {
     private String clientSecret;
     @JsonProperty("security_uri")
     private String securityUri;
-    @JsonProperty("eaddress_service_uri")
-    private String eaddressServiceUri;
+    @JsonProperty("eaddress_uri")
+    private String eaddressUri;
     @JsonProperty("doc_type")
     private String docType;
     @JsonProperty("doc")
@@ -51,12 +51,12 @@ public class Config {
         this.securityUri = securityUri;
     }
 
-    public String getEaddressServiceUri() {
-        return eaddressServiceUri;
+    public String getEaddressUri() {
+        return eaddressUri;
     }
 
-    public void setEaddressServiceUri(String eaddressServiceUri) {
-        this.eaddressServiceUri = eaddressServiceUri;
+    public void setEaddressUri(String eaddressUri) {
+        this.eaddressUri = eaddressUri;
     }
 
     public String getDocType() {
@@ -97,7 +97,7 @@ public class Config {
                 "clientId='" + clientId + '\'' +
                 ", clientSecret='" + clientSecret + '\'' +
                 ", securityUri='" + securityUri + '\'' +
-                ", eaddressServiceUri='" + eaddressServiceUri + '\'' +
+                ", eaddressUri='" + eaddressUri + '\'' +
                 ", docType='" + docType + '\'' +
                 ", doc='" + doc + '\'' +
                 ", name='" + name + '\'' +

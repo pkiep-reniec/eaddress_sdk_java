@@ -45,7 +45,7 @@ public class LotService {
 
             if (token != null) {
                 CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
-                URIBuilder uriBuilder = utils.convertToUriBuilder(searchRequest, this.config.getEaddressServiceUri().concat("/api/v1.0/lot"));
+                URIBuilder uriBuilder = utils.convertToUriBuilder(searchRequest, this.config.getEaddressUri().concat("/api/v1.0/lot"));
 
                 if (uriBuilder == null) {
                     return null;
@@ -79,7 +79,7 @@ public class LotService {
 
             if (token != null) {
                 CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
-                URIBuilder uriBuilder = utils.convertToUriBuilder(searchRequest, this.config.getEaddressServiceUri().concat("/api/v1.0/lot/").concat(lotId));
+                URIBuilder uriBuilder = utils.convertToUriBuilder(searchRequest, this.config.getEaddressUri().concat("/api/v1.0/lot/").concat(lotId));
 
                 if (uriBuilder == null) {
                     return null;
@@ -113,7 +113,7 @@ public class LotService {
 
             if (token != null) {
                 CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(MySSLConnectionSocketFactory.getConnectionSocketFactory()).build();
-                HttpGet request = new HttpGet(this.config.getEaddressServiceUri().concat("/api/v1.0/lot/").concat(lotId).concat("/metadata"));
+                HttpGet request = new HttpGet(this.config.getEaddressUri().concat("/api/v1.0/lot/").concat(lotId).concat("/metadata"));
                 request.setHeader("Authorization", "Bearer ".concat(token));
 
                 HttpResponse response = client.execute(request);

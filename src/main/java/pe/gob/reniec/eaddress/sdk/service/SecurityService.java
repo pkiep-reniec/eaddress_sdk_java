@@ -9,7 +9,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
-import pe.gob.reniec.eaddress.sdk.dto.ApiResponse;
 import pe.gob.reniec.eaddress.sdk.dto.Config;
 import pe.gob.reniec.eaddress.sdk.dto.TokenResponse;
 import pe.gob.reniec.eaddress.sdk.utils.ConvertResponse;

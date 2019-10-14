@@ -156,7 +156,7 @@ public class SendService {
                     .addBinaryBody("fileSign", file, ContentType.create("application/octet-stream"), file.getName())
                     .build();
 
-            HttpPost request = new HttpPost(this.config.getEaddressServiceUri().concat("/api/v1.0/send/single"));
+            HttpPost request = new HttpPost(this.config.getEaddressUri().concat("/api/v1.0/send/single"));
             request.setHeader("Authorization", "Bearer ".concat(accessToken));
             request.setEntity(entity);
 
@@ -186,7 +186,7 @@ public class SendService {
                     .addBinaryBody("fileSign", file, ContentType.create("application/octet-stream"), file.getName())
                     .build();
 
-            HttpPost request = new HttpPost(this.config.getEaddressServiceUri().concat("/api/v1.0/send/massive"));
+            HttpPost request = new HttpPost(this.config.getEaddressUri().concat("/api/v1.0/send/massive"));
             request.setHeader("Authorization", "Bearer ".concat(accessToken));
             request.setEntity(entity);
 
