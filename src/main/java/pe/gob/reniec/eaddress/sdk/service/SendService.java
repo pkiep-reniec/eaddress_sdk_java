@@ -148,7 +148,6 @@ public class SendService {
                     .addTextBody("docType", oMessage.getDocType())
                     .addTextBody("subject", oMessage.getSubject())
                     .addTextBody("message", oMessage.getMessage())
-                    .addTextBody("rep", oMessage.getRep() == null ? "" : oMessage.getRep())
                     .addTextBody("tag", oMessage.getTag() == null ? "" : oMessage.getTag())
                     .addTextBody("callback", oMessage.getCallback() == null ? "" : oMessage.getCallback())
                     .addTextBody("attachments", oMessage.getAttachments() == null ? "" : oMessage.getAttachments())

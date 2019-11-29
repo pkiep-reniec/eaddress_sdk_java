@@ -48,11 +48,10 @@ public class SendTest {
         Message oMessage = new Message();
 //        oMessage.setDocType(Constants.TYPE_DOC_RUC);
 //        oMessage.setDoc("20100055237");
-//        oMessage.setRep("46256479,70273865");
         oMessage.setDocType(Constants.TYPE_DOC_DNI);
-        oMessage.setDoc("11111111");
+        oMessage.setDoc("46256479");
 
-        oMessage.setSubject("mensaje de prueba individual disolver");
+        oMessage.setSubject("testing");
         oMessage.setMessage("<p>Hola <b>Mundo</b></p>");
         oMessage.setTag("tag");
 

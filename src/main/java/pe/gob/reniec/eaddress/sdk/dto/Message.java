@@ -15,8 +15,6 @@ public class Message {
     private String subject;
     @JsonProperty("message")
     private String message;
-    @JsonProperty("rep")
-    private String rep;
     @JsonProperty("tag")
     private String tag;
     @JsonProperty("callback")
@@ -61,14 +59,6 @@ public class Message {
         this.message = message;
     }
 
-    public String getRep() {
-        return rep;
-    }
-
-    public void setRep(String rep) {
-        this.rep = rep;
-    }
-
     public String getTag() {
         return tag;
     }
@@ -108,7 +98,6 @@ public class Message {
                 ", docType='" + docType + '\'' +
                 ", subject='" + subject + '\'' +
                 ", message='" + message + '\'' +
-                ", rep='" + rep + '\'' +
                 ", tag='" + tag + '\'' +
                 ", callback='" + callback + '\'' +
                 ", attachments='" + attachments + '\'' +
