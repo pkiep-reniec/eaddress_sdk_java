@@ -206,8 +206,6 @@ public class SendService {
             return null;
         }
 
-        Date date = new Date();
-
         DataPerson oPerson = new DataPerson();
         oPerson.setDocType(this.config.getDocType());
         oPerson.setDoc(this.config.getDoc());
@@ -224,7 +222,8 @@ public class SendService {
         metadata.setTag(message.getTag());
 
         if (single) {
-            String hashMessage = oPerson.getName().concat(oApp.getName()).concat(message.getSubject()).concat(String.valueOf(date.getTime())).concat(message.getMessage());
+//            String hashMessage = oPerson.getName().concat(oApp.getName()).concat(message.getSubject()).concat(String.valueOf(date.getTime())).concat(message.getMessage());
+            String hashMessage = message.getSubject().concat(message.getMessage());
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(hashMessage.getBytes(StandardCharsets.UTF_8));
             String sha256hex = utils.bytesToHex(hash);
