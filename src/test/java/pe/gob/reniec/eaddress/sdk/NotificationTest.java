@@ -27,21 +27,25 @@ public class NotificationTest {
         String configFile = getClass().getClassLoader().getResource("reniec_eaddress.json").getFile();
         reniecEAddressClient = new ReniecEAddressClient(configFile);
 
-        notificationId = "5d8d2a39c89b471284d34e36";
-        lotId = "5d8d2a36c89b4711655603e5";
+        notificationId = "5e5e79a4c89b4704dca0fd90";
+        lotId = "5e5e79a0c89b470437b5ad21";
     }
 
     @Test
     public void fetchAllNotificationsTest() {
         SearchRequest searchRequest = new SearchRequest();
-        searchRequest.setPage(1);
-        searchRequest.setCount(50);
-//        searchRequest.setName("miguel");
+//        searchRequest.setPage(1);
+//        searchRequest.setCount(20);
+//        searchRequest.setDoc("46256479");
+//        searchRequest.setName("alexander");
+//        searchRequest.setSubject("prueba");
+//        searchRequest.setDateBegin(1580515200L);
+//        searchRequest.setDateEnd(1583020799L);
         ApiPaginatorLotNotifications notifications = reniecEAddressClient.fetchAllNotifications(searchRequest);
 
         System.out.println(notifications.getRecordsTotal());
 
-        for (NotificationsResponse notification : notifications.getNotifications()) {
+        for (NotificationsResponse notification : notifications.getData()) {
             System.out.println(notification.toString());
         }
 

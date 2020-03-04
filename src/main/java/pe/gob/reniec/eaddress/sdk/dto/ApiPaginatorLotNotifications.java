@@ -5,11 +5,11 @@ import java.util.List;
 
 public class ApiPaginatorLotNotifications {
     private Integer recordsTotal;
-    private List<NotificationsResponse> notifications;
+    private List<NotificationsResponse> data;
 
     public ApiPaginatorLotNotifications() {
         this.recordsTotal = 0;
-        this.notifications = new ArrayList<>();
+        this.data = new ArrayList<>();
     }
 
     public Integer getRecordsTotal() {
@@ -20,19 +20,19 @@ public class ApiPaginatorLotNotifications {
         this.recordsTotal = recordsTotal;
     }
 
-    public List<NotificationsResponse> getNotifications() {
-        return notifications;
+    public List<NotificationsResponse> getData() {
+        return data;
     }
 
-    public void setNotifications(List<NotificationsResponse> notifications) {
-        this.notifications = notifications;
+    public void setData(List<NotificationsResponse> data) {
+        this.data = data;
     }
 
     @Override
     public String toString() {
         return "PaginatorLotNotifications{" +
                 "recordsTotal=" + recordsTotal +
-                ", notifications=" + notifications +
+                ", notifications=" + data +
                 '}';
     }
 }

@@ -6,7 +6,6 @@ package pe.gob.reniec.eaddress.sdk.dto;
 public class LotData {
 
     private String id;
-    private String notification;
     private String tag;
     private String subject;
     private Integer quantity;
@@ -26,14 +25,6 @@ public class LotData {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getNotification() {
-        return notification;
-    }
-
-    public void setNotification(String notification) {
-        this.notification = notification;
     }
 
     public String getTag() {
@@ -112,7 +103,6 @@ public class LotData {
     public String toString() {
         return "LotData{" +
                 "id='" + id + '\'' +
-                ", notification='" + notification + '\'' +
                 ", tag='" + tag + '\'' +
                 ", subject='" + subject + '\'' +
                 ", quantity=" + quantity +

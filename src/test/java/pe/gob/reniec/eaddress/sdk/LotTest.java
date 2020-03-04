@@ -22,12 +22,17 @@ public class LotTest {
         String configFile = getClass().getClassLoader().getResource("reniec_eaddress.json").getFile();
         reniecEAddressClient = new ReniecEAddressClient(configFile);
 
-        lotId = "5d8d2a36c89b4711655603e5";
+        lotId = "5e5e79a0c89b470437b5ad21";
     }
 
     @Test
     public void fetchAllLotsTest() {
         SearchRequest searchRequest = new SearchRequest();
+//        searchRequest.setPage(1);
+//        searchRequest.setCount(20);
+//        searchRequest.setDateBegin(1580515200L);
+//        searchRequest.setDateEnd(1583020799L);
+
         PaginatorLot paginatorLot = reniecEAddressClient.fetchAllLots(searchRequest);
 
         System.out.println(paginatorLot.getRecordsTotal());
@@ -42,14 +47,17 @@ public class LotTest {
     @Test
     public void fetchLotNotificationsTest() {
         SearchRequest searchRequest = new SearchRequest();
-        searchRequest.setPage(1);
-        searchRequest.setCount(20);
-        searchRequest.setStatus(null);
+//        searchRequest.setPage(1);
+//        searchRequest.setCount(20);
+//        searchRequest.setStatus(null);
+//        searchRequest.setDateBegin(1580515200L);
+//        searchRequest.setDateEnd(1583020799L);
+
         ApiPaginatorLotNotifications paginatorLotNotifications = reniecEAddressClient.fetchLotNotifications(lotId, searchRequest);
 
         System.out.println(paginatorLotNotifications.getRecordsTotal());
 
-        for (NotificationsResponse notificationResponse : paginatorLotNotifications.getNotifications()) {
+        for (NotificationsResponse notificationResponse : paginatorLotNotifications.getData()) {
             System.out.println(notificationResponse.toString());
         }
 
