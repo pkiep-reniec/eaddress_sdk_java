@@ -231,7 +231,7 @@ public class SendService {
             metadata.setChecksum(sha256hex);
             metadata.setQuantity(1);
         } else {
-            Metadata metadataChecksum = getChecksum(fileCsv);
+            Metadata metadataChecksum = getChecksum(message, fileCsv);
 
             if (metadataChecksum == null) {
                 return null;
@@ -244,9 +244,9 @@ public class SendService {
         return metadata;
     }
 
-    private Metadata getChecksum(File fileCsv) throws IOException, NoSuchAlgorithmException {
+    private Metadata getChecksum(Message message, File fileCsv) throws IOException, NoSuchAlgorithmException {
         String line = "";
-        String content = "";
+        String content = message.getSubject().concat(message.getMessage());
         Integer count = -1;
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileCsv), StandardCharsets.UTF_8))) {
