@@ -43,6 +43,16 @@ public class Utils {
         return hexString.toString();
     }
 
+    public byte[] hexToBytes(String data) {
+        byte[] b = new byte[data.length() / 2];
+        for (int i = 0; i < b.length; i++) {
+            int index = i * 2;
+            int v = Integer.parseInt(data.substring(index, index + 2), 16);
+            b[i] = (byte) v;
+        }
+        return b;
+    }
+
     public String createTempDir() {
         int i = 0;
         String tmp = null;

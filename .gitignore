@@ -5,3 +5,5 @@ release.properties
 application.properties
 pom.xml.releaseBackup
 reniec_eaddress.json
+massive_pj.csv
+massive_pn.csv

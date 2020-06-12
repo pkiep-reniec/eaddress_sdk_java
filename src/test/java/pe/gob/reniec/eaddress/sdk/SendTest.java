@@ -51,7 +51,7 @@ public class SendTest {
         oMessage.setDocType(Constants.TYPE_DOC_DNI);
         oMessage.setDoc("46256479");
 
-        oMessage.setSubject("prueba web");
+        oMessage.setSubject("prueba service");
         oMessage.setMessage("<p>Hola <b>Mundo</b></p>");
         oMessage.setTag("ethical");
 
@@ -64,10 +64,10 @@ public class SendTest {
 
     @Test
     public void sendMassiveTest() {
-        String massiveCsv = getClass().getClassLoader().getResource("massive_pj.csv").getFile();
+        String massiveCsv = getClass().getClassLoader().getResource("massive_pn.csv").getFile();
 
         Message oMessage = new Message();
-        oMessage.setSubject("22 mensaje de prueba masiva para [[nombres]]");
+        oMessage.setSubject("mensaje de prueba masiva para [[nombres]]");
         oMessage.setMessage("<p></p>" +
                 "<p>[[nombres]]</p>" +
                 "<p>uno [[numero_orden]]</p>" +
