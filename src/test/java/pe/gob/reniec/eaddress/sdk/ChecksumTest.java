@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 public class ChecksumTest {
 
-    //test para generar el checksum (hash) para envio de notificación individual
+    //test para generar el checksum (hash) para envío de notificación individual
     @Test
     public void generateHashSingleTest() throws Exception {
         String subject = "testing";
@@ -37,7 +37,7 @@ public class ChecksumTest {
         Assert.assertNotNull(sha256hex);
     }
 
-    //test para generar el checksum (hash) para envio de notificación masivo
+    //test para generar el checksum (hash) para envío de notificación masiva
     @Test
     public void generateHashMassiveTest() throws Exception {
         String massiveCsv = Objects.requireNonNull(getClass().getClassLoader().getResource("massive_pn.csv")).getFile();

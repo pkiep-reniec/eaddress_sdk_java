@@ -24,7 +24,7 @@ public class NotificationTest {
 
     @Before
     public void before() {
-        String configFile = getClass().getClassLoader().getResource("reniec_eaddress.json").getFile();
+        String configFile = getClass().getClassLoader().getResource("reniec_eaddress_bk.json").getFile();
         reniecEAddressClient = new ReniecEAddressClient(configFile);
 
         notificationId = "5e5e79a4c89b4704dca0fd90";

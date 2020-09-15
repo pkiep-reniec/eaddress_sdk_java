@@ -34,7 +34,7 @@ public class SendTest {
         oConfigAga.setCertificateId(properties.getProperty("aga.certificate.id"));
         oConfigAga.setSecretPassword(properties.getProperty("aga.password"));
 
-        String configFile = getClass().getClassLoader().getResource("reniec_eaddress.json").getFile();
+        String configFile = getClass().getClassLoader().getResource("reniec_eaddress_bk.json").getFile();
         reniecEAddressClient = new ReniecEAddressClient(configFile, oConfigAga);
     }
 
@@ -51,9 +51,9 @@ public class SendTest {
         oMessage.setDocType(Constants.TYPE_DOC_DNI);
         oMessage.setDoc("46256479");
 
-        oMessage.setSubject("prueba service");
+        oMessage.setSubject("test service");
         oMessage.setMessage("<p>Hola <b>Mundo</b></p>");
-        oMessage.setTag("ethical");
+        oMessage.setTag("test");
 
         ApiResponse result = reniecEAddressClient.sendSingleNotification(oMessage, attachments);
 
@@ -72,7 +72,7 @@ public class SendTest {
                 "<p>[[nombres]]</p>" +
                 "<p>uno [[numero_orden]]</p>" +
                 "<p>dos [[numero_orden]]</p>");
-        oMessage.setTag("tag");
+        oMessage.setTag("test");
 
         ApiResponse result = reniecEAddressClient.sendMassiveNotification(oMessage, new File(massiveCsv));
 

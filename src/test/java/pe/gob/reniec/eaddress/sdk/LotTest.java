@@ -19,7 +19,7 @@ public class LotTest {
 
     @Before
     public void before() {
-        String configFile = getClass().getClassLoader().getResource("reniec_eaddress.json").getFile();
+        String configFile = getClass().getClassLoader().getResource("reniec_eaddress_bk.json").getFile();
         reniecEAddressClient = new ReniecEAddressClient(configFile);
 
         lotId = "5e5e79a0c89b470437b5ad21";
