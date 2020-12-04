@@ -34,7 +34,7 @@ public class SendTest {
         oConfigAga.setCertificateId(properties.getProperty("aga.certificate.id"));
         oConfigAga.setSecretPassword(properties.getProperty("aga.password"));
 
-        String configFile = getClass().getClassLoader().getResource("reniec_eaddress_bk.json").getFile();
+        String configFile = getClass().getClassLoader().getResource("reniec_eaddress.json").getFile();
         reniecEAddressClient = new ReniecEAddressClient(configFile, oConfigAga);
     }
 
