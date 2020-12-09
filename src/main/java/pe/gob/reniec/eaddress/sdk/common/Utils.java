@@ -1,15 +1,19 @@
 package pe.gob.reniec.eaddress.sdk.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZMethod;
 import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
 import org.apache.http.client.utils.URIBuilder;
 import pe.gob.reniec.eaddress.sdk.dto.ConfigAga;
+import pe.gob.reniec.eaddress.sdk.dto.Message;
 import pe.gob.reniec.eaddress.sdk.dto.Metadata;
 import pe.gob.reniec.eaddress.sdk.dto.SearchRequest;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.*;
 
 /**
@@ -19,6 +23,7 @@ public class Utils {
 
     private static Utils __instance = null;
     private static final String tempDir = System.getProperty("java.io.tmpdir").concat(File.separator).concat("temp_sign");
+    public final String separator = "-";
 
     private Utils() {
     }
@@ -192,5 +197,15 @@ public class Utils {
 
     public boolean isEmpty(String s) {
         return s == null || s.trim().isEmpty();
+    }
+
+    public String messageConcatHash(Message message) {
+        String hashMessage = message.getSubject().concat(separator).concat(message.getMessage());
+
+        if (message.getAttachments() != null) {
+            hashMessage.concat(separator).concat(message.getAttachments());
+        }
+
+        return hashMessage;
     }
 }
