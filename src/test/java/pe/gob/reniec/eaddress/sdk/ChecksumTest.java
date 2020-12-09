@@ -22,12 +22,24 @@ import java.util.Objects;
 public class ChecksumTest {
 
     //test para generar el checksum (hash) para envío de notificación individual
+    private static final String separator = "-";
+
     @Test
     public void generateHashSingleTest() throws Exception {
         String subject = "testing";
         String message = "Hola Mundo";
+        List<Attachment> lstAttachment = new ArrayList<>();
+        lstAttachment.add(new Attachment("Archivo demo 1", "https://www.gob.pe/859-plataforma-de-autenticacion-id-peru"));
 
-        String hashMessage = subject.concat(message);
+        String hashMessage = subject.concat(separator).concat(message);
+
+        if (lstAttachment.size() > 0) {
+            for (Attachment attachment : lstAttachment) {
+                String attach = attachment.getName().concat("|").concat(attachment.getUrl());
+                hashMessage = hashMessage.concat(separator).concat(attach);
+            }
+        }
+
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hash = digest.digest(hashMessage.getBytes(StandardCharsets.UTF_8));
         String sha256hex = Utils.getInstance().bytesToHex(hash);
@@ -40,11 +52,15 @@ public class ChecksumTest {
     //test para generar el checksum (hash) para envío de notificación masiva
     @Test
     public void generateHashMassiveTest() throws Exception {
+        String subject = "testing";
+        String message = "Hola Mundo";
         String massiveCsv = Objects.requireNonNull(getClass().getClassLoader().getResource("massive_pn.csv")).getFile();
 
         String line = "";
         String content = "";
         int count = -1;
+
+        content = subject.concat(separator).concat(message).concat(separator);
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(massiveCsv)), StandardCharsets.UTF_8))) {
             while ((line = br.readLine()) != null) {

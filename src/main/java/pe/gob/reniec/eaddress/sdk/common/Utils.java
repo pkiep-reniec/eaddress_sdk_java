@@ -1,15 +1,13 @@
 package pe.gob.reniec.eaddress.sdk.common;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZMethod;
 import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
 import org.apache.http.client.utils.URIBuilder;
-import pe.gob.reniec.eaddress.sdk.dto.ConfigAga;
-import pe.gob.reniec.eaddress.sdk.dto.Message;
-import pe.gob.reniec.eaddress.sdk.dto.Metadata;
-import pe.gob.reniec.eaddress.sdk.dto.SearchRequest;
+import pe.gob.reniec.eaddress.sdk.dto.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -202,8 +200,23 @@ public class Utils {
     public String messageConcatHash(Message message) {
         String hashMessage = message.getSubject().concat(separator).concat(message.getMessage());
 
-        if (message.getAttachments() != null) {
-            hashMessage.concat(separator).concat(message.getAttachments());
+        try {
+            if (message.getAttachments() != null) {
+                ObjectMapper mapper = new ObjectMapper();
+                List<Attachment> lstAttachment;
+                lstAttachment = mapper.readValue(message.getAttachments(), new TypeReference<List<Attachment>>() {
+                });
+
+                for (Attachment attachment : lstAttachment) {
+                    String attach = attachment.getName().concat("|").concat(attachment.getUrl());
+                    hashMessage = hashMessage.concat(separator).concat(attach);
+                }
+            }
+        } catch (Exception ex) {
+            StringWriter sw = new StringWriter();
+            ex.printStackTrace(new PrintWriter(sw));
+
+            System.out.println(sw.toString());
         }
 
         return hashMessage;

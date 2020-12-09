@@ -1,9 +1,11 @@
 package pe.gob.reniec.eaddress.sdk;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import pe.gob.reniec.eaddress.sdk.common.Constants;
+import pe.gob.reniec.eaddress.sdk.common.Utils;
 import pe.gob.reniec.eaddress.sdk.dto.ApiResponse;
 import pe.gob.reniec.eaddress.sdk.dto.Attachment;
 import pe.gob.reniec.eaddress.sdk.dto.ConfigAga;
@@ -22,6 +24,7 @@ import java.util.Properties;
 public class SendTest {
 
     private ReniecEAddressClient reniecEAddressClient;
+    private Utils utils;
 
     @Before
     public void before() throws IOException {
