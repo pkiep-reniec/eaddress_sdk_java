@@ -222,8 +222,7 @@ public class SendService {
         metadata.setTag(message.getTag());
 
         if (single) {
-//            String hashMessage = oPerson.getName().concat(oApp.getName()).concat(message.getSubject()).concat(String.valueOf(date.getTime())).concat(message.getMessage());
-            String hashMessage = message.getSubject().concat(message.getMessage());
+            String hashMessage = utils.messageConcatHash(message);
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(hashMessage.getBytes(StandardCharsets.UTF_8));
             String sha256hex = utils.bytesToHex(hash);
@@ -246,7 +245,7 @@ public class SendService {
 
     private Metadata getChecksum(Message message, File fileCsv) throws IOException, NoSuchAlgorithmException {
         String line = "";
-        String content = message.getSubject().concat(message.getMessage());
+        String content = utils.messageConcatHash(message).concat(utils.separator);
         Integer count = -1;
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileCsv), StandardCharsets.UTF_8))) {
